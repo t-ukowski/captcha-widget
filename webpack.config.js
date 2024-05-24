@@ -6,7 +6,7 @@ module.exports = {
   output: {
     filename: "widget.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/",
+    publicPath: "/captcha-widget/",
     library: "CAPTCHAWidget",
     libraryTarget: "umd",
   },
@@ -25,6 +25,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "src/index.html",
+      inject: true,
     }),
   ],
   devServer: {
