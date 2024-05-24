@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/CAPTCHAWidget.tsx
+import React from "react";
 
 interface CAPTCHAWidgetProps {
   onSolve: () => void;
