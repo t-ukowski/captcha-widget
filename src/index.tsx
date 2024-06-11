@@ -7,7 +7,7 @@ import CAPTCHAWidget from "./CAPTCHAWidget";
 document.addEventListener("DOMContentLoaded", () => {
   const rootElement = document.getElementById("captcha");
   if (rootElement) {
-    const root = createRoot(rootElement); // Creates a root.
+    const root = createRoot(rootElement);
     root.render(
       <CAPTCHAWidget onSolve={() => console.log("CAPTCHA solved")} />
     );
