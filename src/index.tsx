@@ -1,52 +1,29 @@
+// src/index.tsx
 import React from "react";
 import { createRoot } from "react-dom/client";
 import CAPTCHAWidget from "./CAPTCHAWidget";
 
-// Function to manually attach the CAPTCHA widget to a specified element ID
-export const attachCAPTCHA = (elementId: string = "captcha") => {
-  const rootElement = document.getElementById(elementId);
+// Function to attach the CAPTCHA widget automatically to a specified element ID
+const attachCAPTCHA = () => {
+  // This function will attempt to attach the CAPTCHA to an element with ID 'captcha'
+  const rootElement = document.getElementById("captcha");
   if (rootElement) {
     const root = createRoot(rootElement);
     root.render(
       <CAPTCHAWidget onSolve={() => console.log("CAPTCHA solved")} />
     );
   } else {
-    console.error("Failed to find element with ID:", elementId);
+    console.error("No element with ID 'captcha' found.");
   }
 };
 
-// Auto-attach functionality for use with simple script tag inclusion
+// Attach the widget once the DOM is fully loaded
 if (document.readyState === "complete") {
-  // If document is already loaded, we attach immediately
+  // If document is already loaded, attach immediately
   attachCAPTCHA();
 } else {
-  // Otherwise, we wait for the DOM to be fully loaded
+  // Otherwise, listen for when the DOM is fully loaded
   document.addEventListener("DOMContentLoaded", () => {
     attachCAPTCHA();
   });
 }
-
-// Export CAPTCHAWidget as a default export to support importing into React components
-export default CAPTCHAWidget;
-
-// Optional: Export a custom React hook for more integrated React setups
-export const useCAPTCHA = (
-  elementId: string = "captcha",
-  onSolve: () => void
-) => {
-  React.useEffect(() => {
-    attachCAPTCHA(elementId);
-    return () => {
-      const rootElement = document.getElementById(elementId);
-      if (rootElement) {
-        // Cleanup the CAPTCHA component from the DOM to prevent memory leaks
-        const root = createRoot(rootElement);
-        root.unmount();
-      }
-    };
-  }, [elementId]);
-
-  return {
-    solve: () => onSolve(),
-  };
-};
