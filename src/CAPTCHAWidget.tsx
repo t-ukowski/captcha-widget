@@ -1,11 +1,42 @@
 // src/CAPTCHAWidget.tsx
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface CAPTCHAWidgetProps {
   onSolve: () => void;
 }
 
+type DraggableImageProps = {
+  src: string;
+  onDragEnd: (clientX: number, clientY: number) => void;
+  style: React.CSSProperties;
+};
+
+function DraggableImage({ src, onDragEnd, style }: DraggableImageProps) {
+  const handleDragEnd = (e: React.DragEvent<HTMLImageElement>) => {
+    onDragEnd(e.clientX, e.clientY);
+  };
+
+  return (
+    <img src={src} draggable="true" onDragEnd={handleDragEnd} style={style} />
+  );
+}
+
+type Position = {
+  x: number;
+  y: number;
+};
+
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
+  const [backgroundImage, setBackgroundImage] = useState<string>("");
+  const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
+  const [positions, setPositions] = useState<Position[]>([
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+  ]);
+  const refContainer = useRef<HTMLDivElement>(null);
+
   const handleSolveClick = () => {
     // Mock token generation
     const mockToken = "mock-token-" + Math.random().toString(36).substr(2, 9);
@@ -19,8 +50,56 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     onSolve(); // Call the onSolve callback if needed
   };
 
+  useEffect(() => {
+    // Simulate fetching images
+    setBackgroundImage("/mock.jpg");
+    setPuzzleImages(["/mock.jpg", "/mock.jpg", "/mock.jpg", "/mock.jpg"]);
+  }, []);
+
+  const updatePosition = (index: number, clientX: number, clientY: number) => {
+    const rect = refContainer.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const newX = clientX - centerX;
+    const newY = clientY - centerY;
+    const newPositions = positions.map((pos, posIndex) =>
+      posIndex === index ? { x: newX, y: newY } : pos
+    );
+    setPositions(newPositions);
+  };
+
+  const handleDragEnd =
+    (index: number) => (clientX: number, clientY: number) => {
+      updatePosition(index, clientX, clientY);
+    };
+
+  const getPositions = () => {
+    console.log("Current Positions:", positions);
+  };
+
   return (
     <div className="captcha-container">
+      <div
+        ref={refContainer}
+        style={{
+          width: "400px",
+          height: "400px",
+          position: "relative",
+          backgroundImage: `url(${backgroundImage})`,
+        }}
+      >
+        {puzzleImages.map((img, index) => (
+          <DraggableImage
+            key={index}
+            src={img}
+            onDragEnd={handleDragEnd(index)}
+            style={{ width: "50px", height: "50px", position: "absolute" }}
+          />
+        ))}
+        <button onClick={getPositions}>Get Positions</button>
+      </div>
       <button onClick={handleSolveClick}>Solve CAPTCHA</button>
     </div>
   );
