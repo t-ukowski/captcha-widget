@@ -52,8 +52,13 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
 
   useEffect(() => {
     // Simulate fetching images
-    setBackgroundImage("/mock.jpg");
-    setPuzzleImages(["/mock.jpg", "/mock.jpg", "/mock.jpg", "/mock.jpg"]);
+    setBackgroundImage("/images/mock.jpg");
+    setPuzzleImages([
+      "/images/mock.jpg",
+      "/images/mock.jpg",
+      "/images/mock.jpg",
+      "/images/mock.jpg",
+    ]);
   }, []);
 
   const updatePosition = (index: number, clientX: number, clientY: number) => {
