@@ -6,7 +6,7 @@ module.exports = {
   output: {
     filename: "widget.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/captcha-widget/",
+    publicPath: "/captcha-widget/", // Adjusted if needed based on GitHub Pages repo name
     library: "CAPTCHAWidget",
     libraryTarget: "umd",
   },
@@ -19,6 +19,20 @@ module.exports = {
         test: /\.tsx?$/,
         use: "ts-loader",
         exclude: /node_modules/,
+      },
+      // Adding rule for image files
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              outputPath: "images", // All images will be placed inside 'images' folder in the output directory
+              name: "[name].[ext]", // Keep the original name and extension
+              publicPath: (url) => `/captcha-widget/images/${url}`, // Ensure correct path for GitHub Pages
+            },
+          },
+        ],
       },
     ],
   },
