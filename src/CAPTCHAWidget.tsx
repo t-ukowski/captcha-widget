@@ -156,6 +156,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
       </div>
       <button onClick={getPositions}>Get Positions</button>
       <button onClick={handleSolveClick}>Solve CAPTCHA</button>
+      <div>ver 0.2.1</div>
     </div>
   );
 };
