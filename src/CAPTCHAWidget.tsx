@@ -1,6 +1,10 @@
 // src/CAPTCHAWidget.tsx
 import React, { useState, useEffect, useRef } from "react";
-import mockImage from "./images/mock.jpg";
+import mockLarge from "./images/mock_large.jpg";
+import mockImage1 from "./images/mock1.jpg";
+import mockImage2 from "./images/mock2.jpg";
+import mockImage3 from "./images/mock3.jpg";
+import mockImage4 from "./images/mock4.jpg";
 
 interface CAPTCHAWidgetProps {
   onSolve: () => void;
@@ -21,8 +25,6 @@ function DraggableImage({
 }: DraggableImageProps) {
   const handleDragStart = (e: React.DragEvent<HTMLImageElement>) => {
     onDragStart(e.clientX, e.clientY);
-    e.dataTransfer.setDragImage(new Image(), 0, 0); // Makes the original image invisible when dragging
-    e.dataTransfer.effectAllowed = "move"; // Changes cursor to indicate moving
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLImageElement>) => {
@@ -35,14 +37,7 @@ function DraggableImage({
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      style={{
-        ...style,
-        cursor: "pointer", // Cursor is a pointer on hover
-      }}
-      onDragOver={(e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move"; // Changes the cursor during dragging to a moving hand
-      }}
+      style={style}
     />
   );
 }
@@ -81,8 +76,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   };
 
   useEffect(() => {
-    setBackgroundImage(mockImage);
-    setPuzzleImages([mockImage, mockImage, mockImage, mockImage]);
+    setBackgroundImage(mockLarge);
+    setPuzzleImages([mockImage1, mockImage2, mockImage3, mockImage4]);
   }, []);
 
   // const updateOffset = (index: number, clientX: number, clientY: number) => {
@@ -159,15 +154,13 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               transform: `translate(${positions[index].x - 50}px, ${
                 positions[index].y - 50
               }px)`,
-              opacity:
-                positions[index].x === 0 && positions[index].y === 0 ? 0 : 1, // Makes the original position invisible
             }}
           />
         ))}
       </div>
       <button onClick={getPositions}>Get Positions</button>
       <button onClick={handleSolveClick}>Solve CAPTCHA</button>
-      <div>ver 0.2.5</div>
+      <div>ver 0.3.0</div>
     </div>
   );
 };
