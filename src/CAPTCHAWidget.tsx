@@ -98,8 +98,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     const newX = clientX - rect.left - window.scrollX - offsetX + 50; // Added half width of image
     const newY = clientY - rect.top - window.scrollY - offsetY + 50; // Added half height of image
 
-    const limitedX = Math.max(Math.min(newX, rect.width - 50), -50);
-    const limitedY = Math.max(Math.min(newY, rect.height - 50), -50);
+    const limitedX = Math.max(Math.min(newX, 200), -100); // Adjusted for half the width of the puzzle piece
+    const limitedY = Math.max(Math.min(newY, 200), -100); // Adjusted for half the height of the puzzle piece
 
     const newPositions = positions.map((pos, posIndex) =>
       posIndex === index ? { x: limitedX, y: limitedY } : pos
@@ -156,7 +156,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
       </div>
       <button onClick={getPositions}>Get Positions</button>
       <button onClick={handleSolveClick}>Solve CAPTCHA</button>
-      <div>ver 0.2.1</div>
+      <div>ver 0.2.2</div>
     </div>
   );
 };
