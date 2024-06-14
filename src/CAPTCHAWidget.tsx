@@ -1,5 +1,6 @@
 // src/CAPTCHAWidget.tsx
 import React, { useState, useEffect, useRef } from "react";
+import mockImage from "./images/mock.jpg";
 
 interface CAPTCHAWidgetProps {
   onSolve: () => void;
@@ -51,14 +52,9 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   };
 
   useEffect(() => {
-    // Simulate fetching images
-    setBackgroundImage("/images/mock.jpg");
-    setPuzzleImages([
-      "/images/mock.jpg",
-      "/images/mock.jpg",
-      "/images/mock.jpg",
-      "/images/mock.jpg",
-    ]);
+    // Use imported image for all instances
+    setBackgroundImage(mockImage);
+    setPuzzleImages([mockImage, mockImage, mockImage, mockImage]);
   }, []);
 
   const updatePosition = (index: number, clientX: number, clientY: number) => {
