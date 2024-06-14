@@ -8,44 +8,23 @@ interface CAPTCHAWidgetProps {
 
 type DraggableImageProps = {
   src: string;
-  onDragStart: (clientX: number, clientY: number) => void;
   onDragEnd: (clientX: number, clientY: number) => void;
   style: React.CSSProperties;
 };
 
-function DraggableImage({
-  src,
-  onDragStart,
-  onDragEnd,
-  style,
-}: DraggableImageProps) {
-  const handleDragStart = (e: React.DragEvent<HTMLImageElement>) => {
-    onDragStart(e.clientX, e.clientY);
-  };
-
+function DraggableImage({ src, onDragEnd, style }: DraggableImageProps) {
   const handleDragEnd = (e: React.DragEvent<HTMLImageElement>) => {
     onDragEnd(e.clientX, e.clientY);
   };
 
   return (
-    <img
-      src={src}
-      draggable="true"
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      style={style}
-    />
+    <img src={src} draggable="true" onDragEnd={handleDragEnd} style={style} />
   );
 }
 
 type Position = {
   x: number;
   y: number;
-};
-
-type Offset = {
-  offsetX: number;
-  offsetY: number;
 };
 
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
@@ -57,60 +36,44 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     { x: 67, y: 144 },
     { x: -111, y: -100 },
   ]);
-  const [offsets, setOffsets] = useState<Offset[]>(
-    new Array(4).fill({ offsetX: 0, offsetY: 0 })
-  );
   const refContainer = useRef<HTMLDivElement>(null);
 
   const handleSolveClick = () => {
+    // Mock token generation
     const mockToken = "mock-token-" + Math.random().toString(36).substr(2, 9);
+
+    // Dispatch custom event with the mock token
     const event = new CustomEvent("captchaSolved", {
       detail: { token: mockToken },
     });
     window.dispatchEvent(event);
-    onSolve();
+
+    onSolve(); // Call the onSolve callback if needed
   };
 
   useEffect(() => {
+    // Use imported image for all instances
     setBackgroundImage(mockImage);
     setPuzzleImages([mockImage, mockImage, mockImage, mockImage]);
   }, []);
-
-  const updateOffset = (index: number, clientX: number, clientY: number) => {
-    const rect = refContainer.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const offsetX = clientX - rect.left - window.scrollX;
-    const offsetY = clientY - rect.top - window.scrollY;
-    const newOffsets = offsets.map((off, offIndex) =>
-      offIndex === index ? { offsetX, offsetY } : off
-    );
-    setOffsets(newOffsets);
-  };
 
   const updatePosition = (index: number, clientX: number, clientY: number) => {
     const rect = refContainer.current?.getBoundingClientRect();
     if (!rect) return;
 
-    const offsetX = offsets[index].offsetX;
-    const offsetY = offsets[index].offsetY;
+    // Calculate new positions relative to the center of the container
+    const newX = clientX - (rect.left + window.scrollX) - rect.width / 2;
+    const newY = clientY - (rect.top + window.scrollY) - rect.height / 2;
 
-    const newX = clientX - rect.left - window.scrollX - offsetX + 50; // Added half width of image
-    const newY = clientY - rect.top - window.scrollY - offsetY + 50; // Added half height of image
-
-    const limitedX = Math.max(Math.min(newX, rect.width - 50), -50);
-    const limitedY = Math.max(Math.min(newY, rect.height - 50), -50);
+    // Constrain positions to within the bounds of the container
+    const limitedX = Math.max(Math.min(newX, 200), -100); // Adjusted for half the width of the puzzle piece
+    const limitedY = Math.max(Math.min(newY, 200), -100); // Adjusted for half the height of the puzzle piece
 
     const newPositions = positions.map((pos, posIndex) =>
       posIndex === index ? { x: limitedX, y: limitedY } : pos
     );
     setPositions(newPositions);
   };
-
-  const handleDragStart =
-    (index: number) => (clientX: number, clientY: number) => {
-      updateOffset(index, clientX, clientY);
-    };
 
   const handleDragEnd =
     (index: number) => (clientX: number, clientY: number) => {
@@ -130,16 +93,15 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           height: "400px",
           position: "relative",
           backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          backgroundSize: "contain", // Ensures the image fits within the div without being cropped
+          backgroundRepeat: "no-repeat", // Prevents the image from repeating
+          backgroundPosition: "center", // Centers the image within the div
         }}
       >
         {puzzleImages.map((img, index) => (
           <DraggableImage
             key={index}
             src={img}
-            onDragStart={handleDragStart(index)}
             onDragEnd={handleDragEnd(index)}
             style={{
               width: "100px",
@@ -149,7 +111,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               top: `50%`,
               transform: `translate(${positions[index].x - 50}px, ${
                 positions[index].y - 50
-              }px)`,
+              }px)`, // Offset by half the size of the image
             }}
           />
         ))}
