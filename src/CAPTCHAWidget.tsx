@@ -93,6 +93,9 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           height: "400px",
           position: "relative",
           backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "contain", // Ensures the image fits within the div without being cropped
+          backgroundRepeat: "no-repeat", // Prevents the image from repeating
+          backgroundPosition: "center", // Centers the image within the div
         }}
       >
         {puzzleImages.map((img, index) => (
@@ -100,7 +103,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             key={index}
             src={img}
             onDragEnd={handleDragEnd(index)}
-            style={{ width: "50px", height: "50px", position: "absolute" }}
+            style={{ width: "100px", height: "100px", position: "absolute" }}
           />
         ))}
       </div>
