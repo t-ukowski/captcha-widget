@@ -32,9 +32,9 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
   const [positions, setPositions] = useState<Position[]>([
     { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
+    { x: -50, y: 70 },
+    { x: 67, y: 144 },
+    { x: -111, y: -100 },
   ]);
   const refContainer = useRef<HTMLDivElement>(null);
 
@@ -65,6 +65,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     const centerY = rect.top + rect.height / 2;
     const newX = clientX - centerX;
     const newY = clientY - centerY;
+
+    // Ensure the puzzle pieces stay within the bounds
+    if (newX > 200 || newX < -200 || newY > 200 || newY < -200) return;
+
     const newPositions = positions.map((pos, posIndex) =>
       posIndex === index ? { x: newX, y: newY } : pos
     );
@@ -99,8 +103,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             style={{ width: "50px", height: "50px", position: "absolute" }}
           />
         ))}
-        <button onClick={getPositions}>Get Positions</button>
       </div>
+      <button onClick={getPositions}>Get Positions</button>
       <button onClick={handleSolveClick}>Solve CAPTCHA</button>
     </div>
   );
