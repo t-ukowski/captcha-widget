@@ -61,16 +61,16 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     const rect = refContainer.current?.getBoundingClientRect();
     if (!rect) return;
 
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const newX = clientX - centerX;
-    const newY = clientY - centerY;
+    // Calculate new positions relative to the center of the container
+    const newX = clientX - (rect.left + window.scrollX) - rect.width / 2;
+    const newY = clientY - (rect.top + window.scrollY) - rect.height / 2;
 
-    // Ensure the puzzle pieces stay within the bounds
-    if (newX > 200 || newX < -200 || newY > 200 || newY < -200) return;
+    // Constrain positions to within the bounds of the container
+    const limitedX = Math.max(Math.min(newX, 200), -200);
+    const limitedY = Math.max(Math.min(newY, 200), -200);
 
     const newPositions = positions.map((pos, posIndex) =>
-      posIndex === index ? { x: newX, y: newY } : pos
+      posIndex === index ? { x: limitedX, y: limitedY } : pos
     );
     setPositions(newPositions);
   };
@@ -103,7 +103,14 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             key={index}
             src={img}
             onDragEnd={handleDragEnd(index)}
-            style={{ width: "100px", height: "100px", position: "absolute" }}
+            style={{
+              width: "100px",
+              height: "100px",
+              position: "absolute",
+              left: `50%`,
+              top: `50%`,
+              transform: `translate(${positions[index].x}px, ${positions[index].y}px)`,
+            }}
           />
         ))}
       </div>

@@ -29,7 +29,8 @@ module.exports = {
             options: {
               outputPath: "images", // All images will be placed inside 'images' folder in the output directory
               name: "[name].[ext]", // Keep the original name and extension
-              publicPath: (url) => `/captcha-widget/images/${url}`, // Ensure correct path for GitHub Pages
+              publicPath: (url) =>
+                `https://t-ukowski.github.io/captcha-widget/images/${url}`, // Ensure correct path for GitHub Pages
             },
           },
         ],
