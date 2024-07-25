@@ -111,39 +111,93 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   return (
     <div className="captcha-container">
       <div
-        ref={refContainer}
+        className="styled-div"
         style={{
-          width: "400px",
-          height: "400px",
-          position: "relative",
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          border: "1px solid lightgray",
+          padding: "20px",
+          margin: "10px",
         }}
       >
-        {puzzleImages.map((img, index) => (
-          <DraggableImage
-            key={index}
-            src={img}
-            onDragStart={handleDragStart(index)}
-            onDragEnd={handleDragEnd(index)}
+        <div
+          ref={refContainer}
+          style={{
+            width: "400px",
+            height: "400px",
+            position: "relative",
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
+          {puzzleImages.map((img, index) => (
+            <DraggableImage
+              key={index}
+              src={img}
+              onDragStart={handleDragStart(index)}
+              onDragEnd={handleDragEnd(index)}
+              style={{
+                width: "100px",
+                height: "100px",
+                position: "absolute",
+                left: `50%`,
+                top: `50%`,
+                transform: `translate(${positions[index].x - 50}px, ${
+                  positions[index].y - 50
+                }px)`,
+              }}
+            />
+          ))}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            width: "100%",
+          }}
+        >
+          <button
             style={{
-              width: "100px",
-              height: "100px",
-              position: "absolute",
-              left: `50%`,
-              top: `50%`,
-              transform: `translate(${positions[index].x - 50}px, ${
-                positions[index].y - 50
-              }px)`,
+              backgroundColor: "#f8f9fa",
+              color: "#5f6368",
+              border: "1px solid #f1f3f4",
+              borderRadius: "4px",
+              padding: "10px 20px",
+              fontSize: "14px",
+              cursor: "pointer",
+              outline: "none",
+              userSelect: "none",
+              margin: "5px",
+              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
             }}
-          />
-        ))}
+            onClick={getPositions}
+          >
+            Get Positions
+          </button>
+          <button
+            style={{
+              backgroundColor: "#f8f9fa",
+              color: "#5f6368",
+              border: "1px solid #f1f3f4",
+              borderRadius: "4px",
+              padding: "10px 20px",
+              fontSize: "14px",
+              cursor: "pointer",
+              outline: "none",
+              userSelect: "none",
+              margin: "5px",
+              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+            }}
+            onClick={handleSolveClick}
+          >
+            Solve CAPTCHA
+          </button>
+        </div>
+        <div>ver 0.3.1</div>
       </div>
-      <button onClick={getPositions}>Get Positions</button>
-      <button onClick={handleSolveClick}>Solve CAPTCHA</button>
-      <div>ver 0.3.1</div>
     </div>
   );
 };
