@@ -104,6 +104,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
       updatePosition(index, clientX, clientY);
     };
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
   const getPositions = () => {
     console.log("Current Positions:", positions);
   };
@@ -130,6 +134,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
         </div>
         <div
           ref={refContainer}
+          onDragOver={handleDragOver}
           style={{
             width: "400px",
             height: "400px",
@@ -205,7 +210,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.3.4</div>
+        <div>ver 0.3.5</div>
       </div>
     </div>
   );
