@@ -47,11 +47,6 @@ type Position = {
   y: number;
 };
 
-type Offset = {
-  offsetX: number;
-  offsetY: number;
-};
-
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
@@ -61,9 +56,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     { x: 67, y: 144 },
     { x: -111, y: -100 },
   ]);
-  const [offsets, setOffsets] = useState<Offset[]>(
-    new Array(4).fill({ offsetX: 0, offsetY: 0 })
-  );
   const refContainer = useRef<HTMLDivElement>(null);
 
   const handleSolveClick = () => {
@@ -80,30 +72,23 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     setPuzzleImages([mockImage1, mockImage2, mockImage3, mockImage4]);
   }, []);
 
-  // const updateOffset = (index: number, clientX: number, clientY: number) => {
-  //   const rect = refContainer.current?.getBoundingClientRect();
-  //   if (!rect) return;
-
-  //   const offsetX = clientX - rect.left - window.scrollX;
-  //   const offsetY = clientY - rect.top - window.scrollY;
-  //   const newOffsets = offsets.map((off, offIndex) =>
-  //     offIndex === index ? { offsetX, offsetY } : off
-  //   );
-  //   setOffsets(newOffsets);
-  // };
+  useEffect(() => {
+    // This effect does nothing on mount, but on unmount, it will clean up
+    return () => {
+      console.log("Cleaning up CAPTCHA widget...");
+      // Perform any cleanup here if necessary, such as removing event listeners
+    };
+  }, []);
 
   const updatePosition = (index: number, clientX: number, clientY: number) => {
     const rect = refContainer.current?.getBoundingClientRect();
     if (!rect) return;
 
-    // const offsetX = offsets[index].offsetX;
-    // const offsetY = offsets[index].offsetY;
-
     const newX = clientX - (rect.left + window.scrollX) - rect.width / 2;
     const newY = clientY - (rect.top + window.scrollY) - rect.height / 2;
 
-    const limitedX = Math.max(Math.min(newX, 145), -145); // Adjusted for half the width of the puzzle piece
-    const limitedY = Math.max(Math.min(newY, 145), -145); // Adjusted for half the height of the puzzle piece
+    const limitedX = Math.max(Math.min(newX, 145), -145);
+    const limitedY = Math.max(Math.min(newY, 145), -145);
 
     const newPositions = positions.map((pos, posIndex) =>
       posIndex === index ? { x: limitedX, y: limitedY } : pos
@@ -112,9 +97,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   };
 
   const handleDragStart =
-    (index: number) => (clientX: number, clientY: number) => {
-      //updateOffset(index, clientX, clientY);
-    };
+    (index: number) => (clientX: number, clientY: number) => {};
 
   const handleDragEnd =
     (index: number) => (clientX: number, clientY: number) => {
@@ -160,7 +143,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
       </div>
       <button onClick={getPositions}>Get Positions</button>
       <button onClick={handleSolveClick}>Solve CAPTCHA</button>
-      <div>ver 0.3.0</div>
+      <div>ver 0.3.1</div>
     </div>
   );
 };
