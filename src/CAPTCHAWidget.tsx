@@ -134,10 +134,12 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             width: "400px",
             height: "400px",
             position: "relative",
+            marginBottom: "10px",
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
+            boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
           }}
         >
           {puzzleImages.map((img, index) => (
@@ -203,7 +205,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.3.3</div>
+        <div>ver 0.3.4</div>
       </div>
     </div>
   );
