@@ -109,7 +109,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   };
 
   return (
-    <div className="captcha-container">
+    <div
+      className="captcha-container"
+      style={{ display: "flex", justifyContent: "center", padding: "10px" }}
+    >
       <div
         className="styled-div"
         style={{
@@ -119,8 +122,12 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           border: "1px solid lightgray",
           padding: "20px",
           margin: "10px",
+          boxSizing: "border-box",
         }}
       >
+        <div style={{ marginBottom: "10px" }}>
+          Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
+        </div>
         <div
           ref={refContainer}
           style={{
@@ -175,7 +182,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             }}
             onClick={getPositions}
           >
-            Get Positions
+            Pozycje puzzli
           </button>
           <button
             style={{
@@ -193,10 +200,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             }}
             onClick={handleSolveClick}
           >
-            Solve CAPTCHA
+            Zatwierdź
           </button>
         </div>
-        <div>ver 0.3.1</div>
+        <div>ver 0.3.3</div>
       </div>
     </div>
   );
