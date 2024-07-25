@@ -12,23 +12,42 @@ interface CAPTCHAWidgetProps {
 
 type DraggableImageProps = {
   src: string;
-  onDragStart: (clientX: number, clientY: number) => void;
-  onDragEnd: (clientX: number, clientY: number) => void;
+  index: number;
+  onDragStart: (index: number, clientX: number, clientY: number) => void;
+  onDragEnd: (index: number, clientX: number, clientY: number) => void;
+  positions: Position[];
   style: React.CSSProperties;
 };
 
 function DraggableImage({
   src,
+  index,
   onDragStart,
   onDragEnd,
+  positions,
   style,
 }: DraggableImageProps) {
+  const [isDragging, setIsDragging] = useState(false);
+
   const handleDragStart = (e: React.DragEvent<HTMLImageElement>) => {
-    onDragStart(e.clientX, e.clientY);
+    setIsDragging(true);
+    onDragStart(index, e.clientX, e.clientY);
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLImageElement>) => {
-    onDragEnd(e.clientX, e.clientY);
+    setIsDragging(false);
+    onDragEnd(index, e.clientX, e.clientY);
+  };
+
+  const draggableStyle: React.CSSProperties = {
+    ...style,
+    cursor: isDragging ? "grabbing" : "grab",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: `translate(${positions[index].x - 50}px, ${
+      positions[index].y - 50
+    }px)`,
   };
 
   return (
@@ -37,7 +56,7 @@ function DraggableImage({
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      style={style}
+      style={draggableStyle}
     />
   );
 }
@@ -150,18 +169,14 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {puzzleImages.map((img, index) => (
             <DraggableImage
               key={index}
+              index={index}
               src={img}
-              onDragStart={handleDragStart(index)}
-              onDragEnd={handleDragEnd(index)}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              positions={positions}
               style={{
                 width: "100px",
                 height: "100px",
-                position: "absolute",
-                left: `50%`,
-                top: `50%`,
-                transform: `translate(${positions[index].x - 50}px, ${
-                  positions[index].y - 50
-                }px)`,
               }}
             />
           ))}
@@ -210,7 +225,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.3.5</div>
+        <div>ver 0.3.6</div>
       </div>
     </div>
   );
