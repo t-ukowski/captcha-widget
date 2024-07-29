@@ -1,4 +1,3 @@
-// src/CAPTCHAWidget.tsx
 import React, { useState, useEffect, useRef } from "react";
 import mockLarge from "./images/mock_large.jpg";
 import mockImage1 from "./images/mock1.jpg";
@@ -30,12 +29,9 @@ const DraggableImage = ({
   style,
   updatePosition,
 }: DraggableImageProps) => {
-  const ref = useRef<HTMLImageElement>(null);
-
   const handleMouseDown = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) => {
-    // Calculate offset inside the element for more accurate positioning
     const offsetX = e.clientX - positions[index].x;
     const offsetY = e.clientY - positions[index].y;
 
@@ -50,15 +46,13 @@ const DraggableImage = ({
       document.removeEventListener("mouseup", handleMouseUp);
     };
 
-    // Register the global event listeners for mouse move and mouse up
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
-    e.preventDefault(); // Prevent any text selection or drag behavior from the browser
+    e.preventDefault();
   };
 
   return (
     <img
-      ref={ref}
       src={src}
       onMouseDown={handleMouseDown}
       style={{
@@ -67,7 +61,7 @@ const DraggableImage = ({
         position: "absolute",
         left: `${positions[index].x}px`,
         top: `${positions[index].y}px`,
-        userSelect: "none", // Prevent text selection during drag
+        userSelect: "none",
       }}
     />
   );
@@ -77,10 +71,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
   const [positions, setPositions] = useState<Position[]>([
-    { x: 0, y: 0 },
-    { x: 100, y: 70 },
-    { x: 200, y: 140 },
-    { x: 300, y: 210 },
+    { x: 50, y: 50 },
+    { x: 150, y: 70 },
+    { x: 250, y: 140 },
+    { x: 350, y: 210 },
   ]);
 
   useEffect(() => {
@@ -93,6 +87,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
       posIndex === index ? { x, y } : pos
     );
     setPositions(newPositions);
+  };
+
+  const getPositions = () => {
+    console.log("Current Positions:", positions);
   };
 
   const handleSolveClick = () => {
@@ -165,11 +163,29 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             margin: "5px",
             boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
           }}
+          onClick={getPositions}
+        >
+          Pozycje puzzli
+        </button>
+        <button
+          style={{
+            backgroundColor: "#f8f9fa",
+            color: "#5f6368",
+            border: "1px solid #f1f3f4",
+            borderRadius: "4px",
+            padding: "10px 20px",
+            fontSize: "14px",
+            cursor: "pointer",
+            outline: "none",
+            userSelect: "none",
+            margin: "5px",
+            boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+          }}
           onClick={handleSolveClick}
         >
           Zatwierdź
         </button>
-        <div>ver 0.3.11</div>
+        <div>ver 0.4.0</div>
       </div>
     </div>
   );
