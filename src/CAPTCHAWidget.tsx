@@ -26,9 +26,14 @@ const DraggableImage = ({
   src,
   index,
   positions,
+  zIndexes,
   style,
   updatePosition,
-}: DraggableImageProps) => {
+  updateZIndex,
+}: DraggableImageProps & {
+  zIndexes: number[];
+  updateZIndex: (index: number, newZIndex: number) => void;
+}) => {
   const [isGrabbing, setIsGrabbing] = useState(false);
   const handleMouseDown = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
@@ -52,6 +57,9 @@ const DraggableImage = ({
     document.addEventListener("mouseup", handleMouseUp);
     e.preventDefault();
     setIsGrabbing(true);
+
+    const maxZIndex = Math.max(...zIndexes);
+    updateZIndex(index, maxZIndex + 1);
   };
 
   return (
@@ -79,6 +87,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     { x: 67, y: 144 },
     { x: 89, y: 100 },
   ]);
+  const [zIndexes, setZIndexes] = useState<number[]>([1, 2, 3, 4]);
 
   useEffect(() => {
     setBackgroundImage(mockLarge);
@@ -90,6 +99,13 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
       posIndex === index ? { x, y } : pos
     );
     setPositions(newPositions);
+  };
+
+  const updateZIndex = (index: number, newZIndex: number) => {
+    const newZIndexes = zIndexes.map((zIndex, zIndexIndex) =>
+      zIndexIndex === index ? newZIndex : zIndex
+    );
+    setZIndexes(newZIndexes);
   };
 
   const getPositions = () => {
@@ -144,7 +160,9 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               index={index}
               src={img}
               positions={positions}
+              zIndexes={zIndexes}
               updatePosition={updatePosition}
+              updateZIndex={updateZIndex}
               style={{
                 width: "100px",
                 height: "100px",
@@ -196,7 +214,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.4.3</div>
+        <div>ver 0.4.4</div>
       </div>
     </div>
   );
