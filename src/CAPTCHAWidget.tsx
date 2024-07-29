@@ -87,6 +87,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
 
   useEffect(() => {
     if (!isLoading) {
+      console.log("dotarłem tu");
+      console.log(backgroundImage, puzzleImages, startPositions, isLoading);
       setPositions(startPositions);
     }
   }, [isLoading, startPositions]);
