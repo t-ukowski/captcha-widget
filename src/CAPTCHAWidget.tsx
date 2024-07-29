@@ -214,7 +214,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.4.6</div>
+        <div>ver 0.5.1</div>
       </div>
     </div>
   );
