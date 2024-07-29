@@ -120,7 +120,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     onSolve();
   };
 
-  if (isLoading) {
+  if (isLoading || positions.length === 0) {
     return <div>Loading...</div>;
   } else {
     return (
