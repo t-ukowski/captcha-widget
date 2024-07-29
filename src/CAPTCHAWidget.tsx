@@ -4,6 +4,7 @@ import mockImage1 from "./images/mock1.jpg";
 import mockImage2 from "./images/mock2.jpg";
 import mockImage3 from "./images/mock3.jpg";
 import mockImage4 from "./images/mock4.jpg";
+import useCAPTCHAData from "./hooks/useCAPTCHAData";
 
 interface CAPTCHAWidgetProps {
   onSolve: () => void;
@@ -84,20 +85,10 @@ const DraggableImage = ({
 };
 
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
-  const [backgroundImage, setBackgroundImage] = useState<string>("");
-  const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
-  const [positions, setPositions] = useState<Position[]>([
-    { x: 150, y: 150 },
-    { x: 50, y: 70 },
-    { x: 67, y: 144 },
-    { x: 89, y: 100 },
-  ]);
+  const { backgroundImage, puzzleImages, startPositions, isLoading } =
+    useCAPTCHAData();
+  const [positions, setPositions] = useState<Position[]>(startPositions);
   const [zIndexes, setZIndexes] = useState<number[]>([1, 2, 3, 4]);
-
-  useEffect(() => {
-    setBackgroundImage(mockLarge);
-    setPuzzleImages([mockImage1, mockImage2, mockImage3, mockImage4]);
-  }, []);
 
   const updatePosition = (index: number, x: number, y: number) => {
     const newPositions = positions.map((pos, posIndex) =>
@@ -125,6 +116,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     window.dispatchEvent(event);
     onSolve();
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div

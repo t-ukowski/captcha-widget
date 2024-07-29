@@ -2,8 +2,14 @@
 import React from "react";
 import { Root, createRoot } from "react-dom/client";
 import CAPTCHAWidget from "./CAPTCHAWidget";
+import { worker } from "./mocks/browser";
 
 let root: Root | null = null; // Keep a reference to the root
+
+// Start the mock service worker
+// if (process.env.NODE_ENV === 'development') {
+worker.start();
+// }
 
 // Function to attach the CAPTCHA widget automatically to a specified element ID
 const attachCAPTCHA = () => {
@@ -11,9 +17,7 @@ const attachCAPTCHA = () => {
   const rootElement = document.getElementById("captcha");
   if (rootElement) {
     root = createRoot(rootElement);
-    root.render(
-      <CAPTCHAWidget onSolve={detachCAPTCHA} />
-    );
+    root.render(<CAPTCHAWidget onSolve={detachCAPTCHA} />);
   } else {
     console.error("No element with ID 'captcha' found.");
   }
