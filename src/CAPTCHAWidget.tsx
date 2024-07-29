@@ -73,6 +73,7 @@ const DraggableImage = ({
         left: `${positions[index].x}px`,
         top: `${positions[index].y}px`,
         userSelect: "none",
+        zIndex: zIndexes[index],
       }}
     />
   );
@@ -214,7 +215,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.4.4</div>
+        <div>ver 0.4.5</div>
       </div>
     </div>
   );
