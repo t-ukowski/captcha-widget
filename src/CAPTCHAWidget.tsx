@@ -13,8 +13,8 @@ interface CAPTCHAWidgetProps {
 type DraggableImageProps = {
   src: string;
   index: number;
-  onDragStart: (index: number, clientX: number, clientY: number) => void;
-  onDragEnd: (index: number, clientX: number, clientY: number) => void;
+  onDragStart: (clientX: number, clientY: number) => void;
+  onDragEnd: (clientX: number, clientY: number) => void;
   positions: Position[];
   style: React.CSSProperties;
 };
@@ -31,13 +31,17 @@ function DraggableImage({
 
   const handleDragStart = (e: React.DragEvent<HTMLImageElement>) => {
     setIsDragging(true);
-    onDragStart(index, e.clientX, e.clientY);
+    onDragStart(e.clientX, e.clientY);
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLImageElement>) => {
     setIsDragging(false);
-    onDragEnd(index, e.clientX, e.clientY);
+    onDragEnd(e.clientX, e.clientY);
   };
+
+  useEffect(() => {
+    console.log("isDragging changed");
+  }, [isDragging]);
 
   const draggableStyle: React.CSSProperties = {
     ...style,
@@ -171,8 +175,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               key={index}
               index={index}
               src={img}
-              onDragStart={handleDragStart}
-              onDragEnd={handleDragEnd}
+              onDragStart={handleDragStart(index)}
+              onDragEnd={handleDragEnd(index)}
               positions={positions}
               style={{
                 width: "100px",
@@ -225,7 +229,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.3.6</div>
+        <div>ver 0.3.7</div>
       </div>
     </div>
   );
