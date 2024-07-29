@@ -13,57 +13,62 @@ interface CAPTCHAWidgetProps {
 type DraggableImageProps = {
   src: string;
   index: number;
-  onDragStart: (clientX: number, clientY: number) => void;
-  onDragEnd: (clientX: number, clientY: number) => void;
   positions: Position[];
   style: React.CSSProperties;
+  updatePosition: (index: number, x: number, y: number) => void;
 };
-
-function DraggableImage({
-  src,
-  index,
-  onDragStart,
-  onDragEnd,
-  positions,
-  style,
-}: DraggableImageProps) {
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleDragStart = (e: React.DragEvent<HTMLImageElement>) => {
-    setIsDragging(true);
-    onDragStart(e.clientX, e.clientY);
-  };
-
-  const handleDragEnd = (e: React.DragEvent<HTMLImageElement>) => {
-    setIsDragging(false);
-    onDragEnd(e.clientX, e.clientY);
-  };
-
-  const draggableStyle: React.CSSProperties = {
-    ...style,
-    cursor: isDragging ? "grabbing" : "grab",
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: `translate(${positions[index].x - 50}px, ${
-      positions[index].y - 50
-    }px)`,
-  };
-
-  return (
-    <img
-      src={src}
-      draggable="true"
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      style={draggableStyle}
-    />
-  );
-}
 
 type Position = {
   x: number;
   y: number;
+};
+
+const DraggableImage = ({
+  src,
+  index,
+  positions,
+  style,
+  updatePosition,
+}: DraggableImageProps) => {
+  const ref = useRef<HTMLImageElement>(null);
+
+  const handleMouseDown = (
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) => {
+    // Calculate offset inside the element for more accurate positioning
+    const offsetX = e.clientX - positions[index].x;
+    const offsetY = e.clientY - positions[index].y;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const newX = moveEvent.clientX - offsetX;
+      const newY = moveEvent.clientY - offsetY;
+      updatePosition(index, newX, newY);
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  return (
+    <img
+      ref={ref}
+      src={src}
+      onMouseDown={handleMouseDown}
+      style={{
+        ...style,
+        cursor: "grab",
+        position: "absolute",
+        left: `${positions[index].x}px`,
+        top: `${positions[index].y}px`,
+        userSelect: "none", // Prevent text selection during drag
+      }}
+    />
+  );
 };
 
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
@@ -71,11 +76,22 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
   const [positions, setPositions] = useState<Position[]>([
     { x: 0, y: 0 },
-    { x: -50, y: 70 },
-    { x: 67, y: 144 },
-    { x: -111, y: -100 },
+    { x: 100, y: 70 },
+    { x: 200, y: 140 },
+    { x: 300, y: 210 },
   ]);
-  const refContainer = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setBackgroundImage(mockLarge);
+    setPuzzleImages([mockImage1, mockImage2, mockImage3, mockImage4]);
+  }, []);
+
+  const updatePosition = (index: number, x: number, y: number) => {
+    const newPositions = positions.map((pos, posIndex) =>
+      posIndex === index ? { x, y } : pos
+    );
+    setPositions(newPositions);
+  };
 
   const handleSolveClick = () => {
     const mockToken = "mock-token-" + Math.random().toString(36).substr(2, 9);
@@ -84,51 +100,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     });
     window.dispatchEvent(event);
     onSolve();
-  };
-
-  useEffect(() => {
-    setBackgroundImage(mockLarge);
-    setPuzzleImages([mockImage1, mockImage2, mockImage3, mockImage4]);
-  }, []);
-
-  useEffect(() => {
-    // This effect does nothing on mount, but on unmount, it will clean up
-    return () => {
-      console.log("Cleaning up CAPTCHA widget...");
-      // Perform any cleanup here if necessary, such as removing event listeners
-    };
-  }, []);
-
-  const updatePosition = (index: number, clientX: number, clientY: number) => {
-    const rect = refContainer.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const newX = clientX - (rect.left + window.scrollX) - rect.width / 2;
-    const newY = clientY - (rect.top + window.scrollY) - rect.height / 2;
-
-    const limitedX = Math.max(Math.min(newX, 145), -145);
-    const limitedY = Math.max(Math.min(newY, 145), -145);
-
-    const newPositions = positions.map((pos, posIndex) =>
-      posIndex === index ? { x: limitedX, y: limitedY } : pos
-    );
-    setPositions(newPositions);
-  };
-
-  const handleDragStart =
-    (index: number) => (clientX: number, clientY: number) => {};
-
-  const handleDragEnd =
-    (index: number) => (clientX: number, clientY: number) => {
-      updatePosition(index, clientX, clientY);
-    };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    // e.preventDefault();
-  };
-
-  const getPositions = () => {
-    console.log("Current Positions:", positions);
   };
 
   return (
@@ -152,8 +123,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
         </div>
         <div
-          ref={refContainer}
-          onDragOver={handleDragOver}
           style={{
             width: "400px",
             height: "400px",
@@ -171,9 +140,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               key={index}
               index={index}
               src={img}
-              onDragStart={handleDragStart(index)}
-              onDragEnd={handleDragEnd(index)}
               positions={positions}
+              updatePosition={updatePosition}
               style={{
                 width: "100px",
                 height: "100px",
@@ -181,51 +149,25 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             />
           ))}
         </div>
-        <div
+        <button
           style={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            width: "100%",
+            backgroundColor: "#f8f9fa",
+            color: "#5f6368",
+            border: "1px solid #f1f3f4",
+            borderRadius: "4px",
+            padding: "10px 20px",
+            fontSize: "14px",
+            cursor: "pointer",
+            outline: "none",
+            userSelect: "none",
+            margin: "5px",
+            boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
           }}
+          onClick={handleSolveClick}
         >
-          <button
-            style={{
-              backgroundColor: "#f8f9fa",
-              color: "#5f6368",
-              border: "1px solid #f1f3f4",
-              borderRadius: "4px",
-              padding: "10px 20px",
-              fontSize: "14px",
-              cursor: "pointer",
-              outline: "none",
-              userSelect: "none",
-              margin: "5px",
-              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
-            }}
-            onClick={getPositions}
-          >
-            Pozycje puzzli
-          </button>
-          <button
-            style={{
-              backgroundColor: "#f8f9fa",
-              color: "#5f6368",
-              border: "1px solid #f1f3f4",
-              borderRadius: "4px",
-              padding: "10px 20px",
-              fontSize: "14px",
-              cursor: "pointer",
-              outline: "none",
-              userSelect: "none",
-              margin: "5px",
-              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
-            }}
-            onClick={handleSolveClick}
-          >
-            Zatwierdź
-          </button>
-        </div>
-        <div>ver 0.3.9</div>
+          Zatwierdź
+        </button>
+        <div>ver 0.3.10</div>
       </div>
     </div>
   );
