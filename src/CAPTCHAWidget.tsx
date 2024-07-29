@@ -50,8 +50,10 @@ const DraggableImage = ({
       document.removeEventListener("mouseup", handleMouseUp);
     };
 
+    // Register the global event listeners for mouse move and mouse up
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+    e.preventDefault(); // Prevent any text selection or drag behavior from the browser
   };
 
   return (
@@ -167,7 +169,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
         >
           Zatwierdź
         </button>
-        <div>ver 0.3.10</div>
+        <div>ver 0.3.11</div>
       </div>
     </div>
   );
