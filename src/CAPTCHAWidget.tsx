@@ -71,10 +71,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
   const [positions, setPositions] = useState<Position[]>([
-    { x: 50, y: 50 },
-    { x: 150, y: 70 },
-    { x: 250, y: 140 },
-    { x: 350, y: 210 },
+    { x: 200, y: 200 },
+    { x: 150, y: 270 },
+    { x: 267, y: 344 },
+    { x: 89, y: 100 },
   ]);
 
   useEffect(() => {
@@ -149,43 +149,51 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             />
           ))}
         </div>
-        <button
+        <div
           style={{
-            backgroundColor: "#f8f9fa",
-            color: "#5f6368",
-            border: "1px solid #f1f3f4",
-            borderRadius: "4px",
-            padding: "10px 20px",
-            fontSize: "14px",
-            cursor: "pointer",
-            outline: "none",
-            userSelect: "none",
-            margin: "5px",
-            boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+            display: "flex",
+            justifyContent: "space-evenly",
+            width: "100%",
           }}
-          onClick={getPositions}
         >
-          Pozycje puzzli
-        </button>
-        <button
-          style={{
-            backgroundColor: "#f8f9fa",
-            color: "#5f6368",
-            border: "1px solid #f1f3f4",
-            borderRadius: "4px",
-            padding: "10px 20px",
-            fontSize: "14px",
-            cursor: "pointer",
-            outline: "none",
-            userSelect: "none",
-            margin: "5px",
-            boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
-          }}
-          onClick={handleSolveClick}
-        >
-          Zatwierdź
-        </button>
-        <div>ver 0.4.0</div>
+          <button
+            style={{
+              backgroundColor: "#f8f9fa",
+              color: "#5f6368",
+              border: "1px solid #f1f3f4",
+              borderRadius: "4px",
+              padding: "10px 20px",
+              fontSize: "14px",
+              cursor: "pointer",
+              outline: "none",
+              userSelect: "none",
+              margin: "5px",
+              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+            }}
+            onClick={getPositions}
+          >
+            Pozycje puzzli
+          </button>
+          <button
+            style={{
+              backgroundColor: "#f8f9fa",
+              color: "#5f6368",
+              border: "1px solid #f1f3f4",
+              borderRadius: "4px",
+              padding: "10px 20px",
+              fontSize: "14px",
+              cursor: "pointer",
+              outline: "none",
+              userSelect: "none",
+              margin: "5px",
+              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+            }}
+            onClick={handleSolveClick}
+          >
+            Zatwierdź
+          </button>
+        </div>
+        <div>ver 0.4.1</div>
       </div>
     </div>
   );
