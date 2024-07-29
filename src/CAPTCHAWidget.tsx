@@ -85,6 +85,12 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [positions, setPositions] = useState<Position[]>([]);
   const [zIndexes, setZIndexes] = useState<number[]>([1, 2, 3, 4]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      setPositions(startPositions);
+    }
+  }, [isLoading, startPositions]);
+
   const updatePosition = (index: number, x: number, y: number) => {
     const newPositions = positions.map((pos, posIndex) =>
       posIndex === index ? { x, y } : pos
@@ -115,7 +121,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   } else {
-    setPositions(startPositions);
     return (
       <div
         className="captcha-container"
@@ -209,7 +214,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               Zatwierdź
             </button>
           </div>
-          <div>ver 0.5.2</div>
+          <div>ver 0.5.3</div>
         </div>
       </div>
     );
