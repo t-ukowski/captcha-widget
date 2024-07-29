@@ -29,6 +29,7 @@ const DraggableImage = ({
   style,
   updatePosition,
 }: DraggableImageProps) => {
+  const [isGrabbing, setIsGrabbing] = useState(false);
   const handleMouseDown = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) => {
@@ -44,13 +45,13 @@ const DraggableImage = ({
     const handleMouseUp = () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "default";
+      setIsGrabbing(false);
     };
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
-    document.body.style.cursor = "grabbing";
     e.preventDefault();
+    setIsGrabbing(true);
   };
 
   return (
@@ -59,7 +60,7 @@ const DraggableImage = ({
       onMouseDown={handleMouseDown}
       style={{
         ...style,
-        cursor: "grab",
+        cursor: isGrabbing ? "grabbing" : "grab",
         position: "absolute",
         left: `${positions[index].x}px`,
         top: `${positions[index].y}px`,
@@ -195,7 +196,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.4.2</div>
+        <div>ver 0.4.3</div>
       </div>
     </div>
   );
