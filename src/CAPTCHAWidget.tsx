@@ -44,10 +44,12 @@ const DraggableImage = ({
     const handleMouseUp = () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "default";
     };
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+    document.body.style.cursor = "grabbing";
     e.preventDefault();
   };
 
@@ -71,9 +73,9 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
   const [positions, setPositions] = useState<Position[]>([
-    { x: 200, y: 200 },
-    { x: 150, y: 270 },
-    { x: 267, y: 344 },
+    { x: 150, y: 150 },
+    { x: 50, y: 70 },
+    { x: 67, y: 144 },
     { x: 89, y: 100 },
   ]);
 
@@ -193,7 +195,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.4.1</div>
+        <div>ver 0.4.2</div>
       </div>
     </div>
   );
