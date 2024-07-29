@@ -1,9 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import mockLarge from "./images/mock_large.jpg";
-import mockImage1 from "./images/mock1.jpg";
-import mockImage2 from "./images/mock2.jpg";
-import mockImage3 from "./images/mock3.jpg";
-import mockImage4 from "./images/mock4.jpg";
 import useCAPTCHAData from "./hooks/useCAPTCHAData";
 
 interface CAPTCHAWidgetProps {
@@ -87,7 +82,7 @@ const DraggableImage = ({
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const { backgroundImage, puzzleImages, startPositions, isLoading } =
     useCAPTCHAData();
-  const [positions, setPositions] = useState<Position[]>(startPositions);
+  const [positions, setPositions] = useState<Position[]>([]);
   const [zIndexes, setZIndexes] = useState<number[]>([1, 2, 3, 4]);
 
   const updatePosition = (index: number, x: number, y: number) => {
@@ -119,105 +114,106 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  return (
-    <div
-      className="captcha-container"
-      style={{ display: "flex", justifyContent: "center", padding: "10px" }}
-    >
+  } else {
+    setPositions(startPositions);
+    return (
       <div
-        className="styled-div"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          border: "1px solid lightgray",
-          padding: "20px",
-          margin: "10px",
-          boxSizing: "border-box",
-        }}
+        className="captcha-container"
+        style={{ display: "flex", justifyContent: "center", padding: "10px" }}
       >
-        <div style={{ marginBottom: "10px" }}>
-          Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
-        </div>
         <div
-          style={{
-            width: "400px",
-            height: "400px",
-            position: "relative",
-            marginBottom: "10px",
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
-          }}
-        >
-          {puzzleImages.map((img, index) => (
-            <DraggableImage
-              key={index}
-              index={index}
-              src={img}
-              positions={positions}
-              zIndexes={zIndexes}
-              updatePosition={updatePosition}
-              updateZIndex={updateZIndex}
-              style={{
-                width: "100px",
-                height: "100px",
-              }}
-            />
-          ))}
-        </div>
-        <div
+          className="styled-div"
           style={{
             display: "flex",
-            justifyContent: "space-evenly",
-            width: "100%",
+            flexDirection: "column",
+            alignItems: "center",
+            border: "1px solid lightgray",
+            padding: "20px",
+            margin: "10px",
+            boxSizing: "border-box",
           }}
         >
-          <button
+          <div style={{ marginBottom: "10px" }}>
+            Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
+          </div>
+          <div
             style={{
-              backgroundColor: "#f8f9fa",
-              color: "#5f6368",
-              border: "1px solid #f1f3f4",
-              borderRadius: "4px",
-              padding: "10px 20px",
-              fontSize: "14px",
-              cursor: "pointer",
-              outline: "none",
-              userSelect: "none",
-              margin: "5px",
+              width: "400px",
+              height: "400px",
+              position: "relative",
+              marginBottom: "10px",
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
               boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
             }}
-            onClick={getPositions}
           >
-            Pozycje puzzli
-          </button>
-          <button
+            {puzzleImages.map((img, index) => (
+              <DraggableImage
+                key={index}
+                index={index}
+                src={img}
+                positions={positions}
+                zIndexes={zIndexes}
+                updatePosition={updatePosition}
+                updateZIndex={updateZIndex}
+                style={{
+                  width: "100px",
+                  height: "100px",
+                }}
+              />
+            ))}
+          </div>
+          <div
             style={{
-              backgroundColor: "#f8f9fa",
-              color: "#5f6368",
-              border: "1px solid #f1f3f4",
-              borderRadius: "4px",
-              padding: "10px 20px",
-              fontSize: "14px",
-              cursor: "pointer",
-              outline: "none",
-              userSelect: "none",
-              margin: "5px",
-              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+              display: "flex",
+              justifyContent: "space-evenly",
+              width: "100%",
             }}
-            onClick={handleSolveClick}
           >
-            Zatwierdź
-          </button>
+            <button
+              style={{
+                backgroundColor: "#f8f9fa",
+                color: "#5f6368",
+                border: "1px solid #f1f3f4",
+                borderRadius: "4px",
+                padding: "10px 20px",
+                fontSize: "14px",
+                cursor: "pointer",
+                outline: "none",
+                userSelect: "none",
+                margin: "5px",
+                boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+              }}
+              onClick={getPositions}
+            >
+              Pozycje puzzli
+            </button>
+            <button
+              style={{
+                backgroundColor: "#f8f9fa",
+                color: "#5f6368",
+                border: "1px solid #f1f3f4",
+                borderRadius: "4px",
+                padding: "10px 20px",
+                fontSize: "14px",
+                cursor: "pointer",
+                outline: "none",
+                userSelect: "none",
+                margin: "5px",
+                boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+              }}
+              onClick={handleSolveClick}
+            >
+              Zatwierdź
+            </button>
+          </div>
+          <div>ver 0.5.2</div>
         </div>
-        <div>ver 0.5.1</div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default CAPTCHAWidget;
