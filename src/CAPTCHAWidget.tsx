@@ -37,6 +37,7 @@ function DraggableImage({
   const handleDragEnd = (e: React.DragEvent<HTMLImageElement>) => {
     setIsDragging(false);
     onDragEnd(e.clientX, e.clientY);
+    e.currentTarget.style.cursor = "grab";
   };
 
   useEffect(() => {
@@ -129,6 +130,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.currentTarget.style.cursor = "grabbing";
   };
 
   const getPositions = () => {
@@ -229,7 +231,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.3.7</div>
+        <div>ver 0.3.8</div>
       </div>
     </div>
   );
