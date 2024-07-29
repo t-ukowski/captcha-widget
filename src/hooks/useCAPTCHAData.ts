@@ -1,11 +1,11 @@
 // useCAPTCHAData.js
 import { useState, useEffect } from "react";
 import axios from "axios";
-import mockLarge from "./images/mock_large.jpg";
-import mockImage1 from "./images/mock1.jpg";
-import mockImage2 from "./images/mock2.jpg";
-import mockImage3 from "./images/mock3.jpg";
-import mockImage4 from "./images/mock4.jpg";
+import mockLarge from "../images/mock_large.jpg";
+import mockImage1 from "../images/mock1.jpg";
+import mockImage2 from "../images/mock2.jpg";
+import mockImage3 from "../images/mock3.jpg";
+import mockImage4 from "../images/mock4.jpg";
 
 const useCAPTCHAData = () => {
   const [backgroundImage, setBackgroundImage] = useState<string>("");
