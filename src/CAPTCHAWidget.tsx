@@ -42,8 +42,12 @@ const DraggableImage = ({
     const offsetY = e.clientY - positions[index].y;
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
-      const newX = moveEvent.clientX - offsetX;
-      const newY = moveEvent.clientY - offsetY;
+      let newX = moveEvent.clientX - offsetX;
+      let newY = moveEvent.clientY - offsetY;
+      if (newX < 0) newX = 0;
+      if (newX > 300) newX = 300;
+      if (newY < 0) newY = 0;
+      if (newY > 300) newY = 300;
       updatePosition(index, newX, newY);
     };
 
@@ -215,7 +219,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             Zatwierdź
           </button>
         </div>
-        <div>ver 0.4.5</div>
+        <div>ver 0.4.6</div>
       </div>
     </div>
   );
