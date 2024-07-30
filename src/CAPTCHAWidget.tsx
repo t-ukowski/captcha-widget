@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import useCAPTCHAData from "./hooks/useCAPTCHAData";
 import CAPTCHAButton from "./components/CAPTCHAButton";
+import CAPTCHAContainer from "./components/CAPTCHAContainer";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 interface CAPTCHAWidgetProps {
   onSolve: () => void;
@@ -127,79 +129,67 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   };
 
   if (isLoading || positions.length === 0) {
-    return <div>Loading...</div>;
+    return (
+      <CAPTCHAContainer>
+        <LoadingSpinner />
+      </CAPTCHAContainer>
+    );
   } else if (rateLimitMessage) {
     return (
-      <div>
+      <CAPTCHAContainer>
         <div>{rateLimitMessage}</div>
         <CAPTCHAButton onClick={clearRateLimitMessage}>
           Spróbuj ponownie
         </CAPTCHAButton>
-      </div>
+      </CAPTCHAContainer>
     );
   } else {
     return (
-      <div
-        className="captcha-container"
-        style={{ display: "flex", justifyContent: "center", padding: "10px" }}
-      >
+      <CAPTCHAContainer>
+        <div style={{ marginBottom: "10px" }}>
+          Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
+        </div>
         <div
-          className="styled-div"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            border: "1px solid lightgray",
-            padding: "20px",
-            margin: "10px",
-            boxSizing: "border-box",
+            width: "400px",
+            height: "400px",
+            position: "relative",
+            marginBottom: "10px",
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
           }}
         >
-          <div style={{ marginBottom: "10px" }}>
-            Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
-          </div>
-          <div
-            style={{
-              width: "400px",
-              height: "400px",
-              position: "relative",
-              marginBottom: "10px",
-              backgroundImage: `url(${backgroundImage})`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
-            }}
-          >
-            {puzzleImages.map((img, index) => (
-              <DraggableImage
-                key={index}
-                index={index}
-                src={img}
-                positions={positions}
-                zIndexes={zIndexes}
-                updatePosition={updatePosition}
-                updateZIndex={updateZIndex}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                }}
-              />
-            ))}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              width: "100%",
-            }}
-          >
-            <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
-            <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
-          </div>
-          <div>ver 0.5.5</div>
+          {puzzleImages.map((img, index) => (
+            <DraggableImage
+              key={index}
+              index={index}
+              src={img}
+              positions={positions}
+              zIndexes={zIndexes}
+              updatePosition={updatePosition}
+              updateZIndex={updateZIndex}
+              style={{
+                width: "100px",
+                height: "100px",
+              }}
+            />
+          ))}
         </div>
-      </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            width: "100%",
+          }}
+        >
+          <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
+          <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
+        </div>
+        <div>ver 0.5.6</div>
+      </CAPTCHAContainer>
     );
   }
 };
