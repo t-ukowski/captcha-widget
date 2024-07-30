@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const LoadingSpinner: React.FC = () => {
+  useEffect(() => {
+    // Define the keyframes as a string
+    const keyframes = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+
+    // Create a style element and append the keyframes
+    const styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    styleSheet.innerText = keyframes;
+    document.head.appendChild(styleSheet);
+
+    // Cleanup function to remove the style element
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
+
   return (
     <div style={spinnerContainerStyle}>
       <div style={spinnerStyle}></div>
@@ -25,16 +46,5 @@ const spinnerStyle: React.CSSProperties = {
   borderRadius: "50%",
   animation: "spin 1s linear infinite",
 };
-
-const spinnerAnimation = `
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}`;
-
-document.styleSheets[0].insertRule(
-  spinnerAnimation,
-  document.styleSheets[0].cssRules.length
-);
 
 export default LoadingSpinner;
