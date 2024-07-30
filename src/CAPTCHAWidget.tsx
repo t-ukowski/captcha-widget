@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useCAPTCHAData from "./hooks/useCAPTCHAData";
+import useCAPTCHASolver from "./hooks/useCAPTCHASolver";
 import CAPTCHAButton from "./components/CAPTCHAButton";
 import CAPTCHAContainer from "./components/CAPTCHAContainer";
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -87,19 +88,44 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     backgroundImage,
     puzzleImages,
     startPositions,
-    isLoading,
+    isLoading: isDataLoading,
     newCAPTCHA,
     rateLimitMessage,
     clearRateLimitMessage,
   } = useCAPTCHAData();
+
+  const { solveCAPTCHA, validationResult, isValidating, error } =
+    useCAPTCHASolver();
+
   const [positions, setPositions] = useState<Position[]>([]);
   const [zIndexes, setZIndexes] = useState<number[]>([1, 2, 3, 4]);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
+  const [showError, setShowError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isDataLoading) {
       setPositions(startPositions);
     }
-  }, [isLoading, startPositions]);
+  }, [isDataLoading, startPositions]);
+
+  useEffect(() => {
+    if (validationResult) {
+      if (validationResult.success) {
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          const event = new CustomEvent("captchaSolved", {
+            detail: { token: validationResult.token },
+          });
+          window.dispatchEvent(event);
+          onSolve();
+        }, 3000);
+      } else {
+        setShowError(true);
+        newCAPTCHA();
+      }
+    }
+  }, [validationResult, onSolve, newCAPTCHA]);
 
   const updatePosition = (index: number, x: number, y: number) => {
     const newPositions = positions.map((pos, posIndex) =>
@@ -120,15 +146,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   };
 
   const handleSolveClick = () => {
-    const mockToken = "mock-token-" + Math.random().toString(36).substr(2, 9);
-    const event = new CustomEvent("captchaSolved", {
-      detail: { token: mockToken },
-    });
-    window.dispatchEvent(event);
-    onSolve();
+    solveCAPTCHA(positions);
   };
 
-  if (isLoading || positions.length === 0) {
+  if (isDataLoading || isValidating || positions.length === 0) {
     return (
       <CAPTCHAContainer>
         <div
@@ -150,9 +171,28 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
         </CAPTCHAButton>
       </CAPTCHAContainer>
     );
+  } else if (showSuccess) {
+    return (
+      <CAPTCHAContainer>
+        <div
+          style={{
+            width: "400px",
+            height: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div>Captcha Solved Successfully!</div>
+        </div>
+      </CAPTCHAContainer>
+    );
   } else {
     return (
       <CAPTCHAContainer>
+        {showError && (
+          <div style={{ color: "red" }}>Błędna odpowiedź, spróbuj ponownie</div>
+        )}
         <div style={{ marginBottom: "10px" }}>
           Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
         </div>
@@ -195,7 +235,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.5.7</div>
+        <div>ver 0.6.0</div>
       </CAPTCHAContainer>
     );
   }
