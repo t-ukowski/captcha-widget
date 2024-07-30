@@ -131,7 +131,14 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   if (isLoading || positions.length === 0) {
     return (
       <CAPTCHAContainer>
-        <LoadingSpinner />
+        <div
+          style={{
+            width: "400px",
+            height: "400px",
+          }}
+        >
+          <LoadingSpinner />
+        </div>
       </CAPTCHAContainer>
     );
   } else if (rateLimitMessage) {
@@ -188,7 +195,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.5.6</div>
+        <div>ver 0.5.7</div>
       </CAPTCHAContainer>
     );
   }
