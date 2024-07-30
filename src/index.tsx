@@ -1,7 +1,11 @@
 // src/index.tsx
 import React from "react";
 import { Root, createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
 import CAPTCHAWidget from "./CAPTCHAWidget";
+
+// Create a QueryClient instance
+const queryClient = new QueryClient();
 
 let root: Root | null = null; // Keep a reference to the root
 
@@ -11,7 +15,11 @@ const attachCAPTCHA = () => {
   const rootElement = document.getElementById("captcha");
   if (rootElement) {
     root = createRoot(rootElement);
-    root.render(<CAPTCHAWidget onSolve={detachCAPTCHA} />);
+    root.render(
+      <QueryClientProvider client={queryClient}>
+        <CAPTCHAWidget onSolve={detachCAPTCHA} />
+      </QueryClientProvider>
+    );
   } else {
     console.error("No element with ID 'captcha' found.");
   }

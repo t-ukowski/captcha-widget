@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import useCAPTCHAData from "./hooks/useCAPTCHAData";
+import CAPTCHAButton from "./components/CAPTCHAButton";
 
 interface CAPTCHAWidgetProps {
   onSolve: () => void;
@@ -131,7 +132,9 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     return (
       <div>
         <div>{rateLimitMessage}</div>
-        <button onClick={clearRateLimitMessage}>Try Again</button>
+        <CAPTCHAButton onClick={clearRateLimitMessage}>
+          Spróbuj ponownie
+        </CAPTCHAButton>
       </div>
     );
   } else {
@@ -191,44 +194,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               width: "100%",
             }}
           >
-            <button
-              style={{
-                backgroundColor: "#f8f9fa",
-                color: "#5f6368",
-                border: "1px solid #f1f3f4",
-                borderRadius: "4px",
-                padding: "10px 20px",
-                fontSize: "14px",
-                cursor: "pointer",
-                outline: "none",
-                userSelect: "none",
-                margin: "5px",
-                boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
-              }}
-              onClick={getPositions}
-            >
-              Pozycje puzzli
-            </button>
-            <button
-              style={{
-                backgroundColor: "#f8f9fa",
-                color: "#5f6368",
-                border: "1px solid #f1f3f4",
-                borderRadius: "4px",
-                padding: "10px 20px",
-                fontSize: "14px",
-                cursor: "pointer",
-                outline: "none",
-                userSelect: "none",
-                margin: "5px",
-                boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
-              }}
-              onClick={handleSolveClick}
-            >
-              Zatwierdź
-            </button>
+            <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
+            <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
           </div>
-          <div>ver 0.5.4</div>
+          <div>ver 0.5.5</div>
         </div>
       </div>
     );
