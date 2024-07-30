@@ -1,5 +1,6 @@
 // useCAPTCHAData.js
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "react-query";
 import axios from "axios";
 import mockLarge from "../images/mock_large.jpg";
 import mockImage1 from "../images/mock1.jpg";
@@ -7,46 +8,69 @@ import mockImage2 from "../images/mock2.jpg";
 import mockImage3 from "../images/mock3.jpg";
 import mockImage4 from "../images/mock4.jpg";
 
-const useCAPTCHAData = () => {
-  const [backgroundImage, setBackgroundImage] = useState<string>("");
-  const [puzzleImages, setPuzzleImages] = useState<string[]>([]);
-  const [startPositions, setPositions] = useState<{ x: number; y: number }[]>(
-    []
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+// Mock API function to simulate fetching CAPTCHA data
+const fetchCAPTCHAData = async () => {
+  try {
+    // Simulate a delay and mock data fetching
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  useEffect(() => {
-    // Commenting out the actual GET request logic
-    const fetchCAPTCHAData = async () => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Uncomment this block for actual API call
+    // const response = await axios.get('/getCAPTCHA');
+    // if (response.status === 429) {
+    //   throw new Error(response.data.message || 'Too many requests. Please try again later.');
+    // }
+    // return response.data;
 
-        // Hard-coded mock data
-        setBackgroundImage(mockLarge);
-        setPuzzleImages([mockImage1, mockImage2, mockImage3, mockImage4]);
-        setPositions([
-          { x: 150, y: 150 },
-          { x: 50, y: 70 },
-          { x: 67, y: 144 },
-          { x: 89, y: 100 },
-        ]);
-
-        // const response = await axios.get("/getCAPTCHA");
-        // const data = response.data;
-        // setBackgroundImage(data.backgroundImage);
-        // setPuzzleImages(data.puzzleImages);
-        // setPositions(data.positions);
-      } catch (error) {
-        console.error("Error fetching CAPTCHA data:", error);
-      } finally {
-        setIsLoading(false);
-      }
+    // Returning hardcoded mock data
+    return {
+      backgroundImage: mockLarge,
+      puzzleImages: [mockImage1, mockImage2, mockImage3, mockImage4],
+      startPositions: [
+        { x: 150, y: 150 },
+        { x: 50, y: 70 },
+        { x: 67, y: 144 },
+        { x: 89, y: 100 },
+      ],
     };
+  } catch (error) {
+    // Check for rate limit error (HTTP 429)
+    if (axios.isAxiosError(error) && error.response?.status === 429) {
+      throw new Error("Too many requests. Please try again later.");
+    }
+    // Re-throw other errors
+    throw error;
+  }
+};
 
-    fetchCAPTCHAData();
-  }, []);
+const useCAPTCHAData = () => {
+  const [rateLimitMessage, setRateLimitMessage] = useState<string | null>(null);
 
-  return { backgroundImage, puzzleImages, startPositions, isLoading };
+  const { data, isLoading, error, refetch } = useQuery(
+    "captchaData",
+    fetchCAPTCHAData,
+    {
+      staleTime: Infinity,
+      cacheTime: Infinity,
+      onError: (error: any) => {
+        if (error.message === "Too many requests. Please try again later.") {
+          setRateLimitMessage(error.message);
+        }
+      },
+    }
+  );
+
+  // Provide a function to manually clear the rate limit message
+  const clearRateLimitMessage = () => setRateLimitMessage(null);
+
+  return {
+    backgroundImage: data?.backgroundImage ?? "",
+    puzzleImages: data?.puzzleImages ?? [],
+    startPositions: data?.startPositions ?? [],
+    isLoading,
+    rateLimitMessage,
+    clearRateLimitMessage,
+    newCAPTCHA: refetch,
+  };
 };
 
 export default useCAPTCHAData;

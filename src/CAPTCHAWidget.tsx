@@ -80,15 +80,20 @@ const DraggableImage = ({
 };
 
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
-  const { backgroundImage, puzzleImages, startPositions, isLoading } =
-    useCAPTCHAData();
+  const {
+    backgroundImage,
+    puzzleImages,
+    startPositions,
+    isLoading,
+    newCAPTCHA,
+    rateLimitMessage,
+    clearRateLimitMessage,
+  } = useCAPTCHAData();
   const [positions, setPositions] = useState<Position[]>([]);
   const [zIndexes, setZIndexes] = useState<number[]>([1, 2, 3, 4]);
 
   useEffect(() => {
     if (!isLoading) {
-      console.log("dotarłem tu");
-      console.log(backgroundImage, puzzleImages, startPositions, isLoading);
       setPositions(startPositions);
     }
   }, [isLoading, startPositions]);
@@ -122,6 +127,13 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
 
   if (isLoading || positions.length === 0) {
     return <div>Loading...</div>;
+  } else if (rateLimitMessage) {
+    return (
+      <div>
+        <div>{rateLimitMessage}</div>
+        <button onClick={clearRateLimitMessage}>Try Again</button>
+      </div>
+    );
   } else {
     return (
       <div
