@@ -15,7 +15,7 @@ const fetchCAPTCHAData = async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Uncomment this block for actual API call
-    const response = await axios.get("http://localhost:3000/getcaptchadata");
+    const response = await axios.get("http://localhost:3003/getcaptchadata");
     if (response.status === 429) {
       throw new Error(
         response.data.message || "Too many requests. Please try again later."
