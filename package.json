@@ -12,6 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/t-ukowski/captcha-widget.git"
   },
+  "proxy": "http://localhost:3003",
   "keywords": [],
   "author": "",
   "license": "ISC",
