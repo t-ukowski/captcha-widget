@@ -23,6 +23,7 @@ const fetchCAPTCHAData = async () => {
 
     // Returning hardcoded mock data
     return {
+      sessionId: "mock-session-id-" + Math.random().toString(36).substr(2, 9),
       backgroundImage: mockLarge,
       puzzleImages: [mockImage1, mockImage2, mockImage3, mockImage4],
       startPositions: [
@@ -63,6 +64,7 @@ const useCAPTCHAData = () => {
   const clearRateLimitMessage = () => setRateLimitMessage(null);
 
   return {
+    sessionId: data?.sessionId ?? "",
     backgroundImage: data?.backgroundImage ?? "",
     puzzleImages: data?.puzzleImages ?? [],
     startPositions: data?.startPositions ?? [],

@@ -85,6 +85,7 @@ const DraggableImage = ({
 
 const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const {
+    sessionId,
     backgroundImage,
     puzzleImages,
     startPositions,
@@ -146,7 +147,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   };
 
   const handleSolveClick = () => {
-    solveCAPTCHA(positions);
+    solveCAPTCHA(sessionId, positions);
   };
 
   if (isDataLoading || isValidating || positions.length === 0) {
@@ -235,7 +236,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.6.0</div>
+        <div>ver 0.6.1</div>
       </CAPTCHAContainer>
     );
   }

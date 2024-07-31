@@ -15,7 +15,10 @@ const useCAPTCHASolver = () => {
   const [isValidating, setIsValidating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const solveCAPTCHA = async (positions: { x: number; y: number }[]) => {
+  const solveCAPTCHA = async (
+    sessionId: string,
+    positions: { x: number; y: number }[]
+  ) => {
     setIsValidating(true);
     setError(null);
 
@@ -24,7 +27,7 @@ const useCAPTCHASolver = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Uncomment this block for actual API call
-      // const response = await axios.post('/validateCAPTCHA', { positions });
+      // const response = await axios.post('/validate', { sessionId, positions });
       // if (response.data.success) {
       //   setValidationResult({ success: true, token: response.data.token });
       // } else {
