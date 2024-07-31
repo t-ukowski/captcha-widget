@@ -15,24 +15,26 @@ const fetchCAPTCHAData = async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Uncomment this block for actual API call
-    // const response = await axios.get('/getCAPTCHA');
-    // if (response.status === 429) {
-    //   throw new Error(response.data.message || 'Too many requests. Please try again later.');
-    // }
-    // return response.data;
+    const response = await axios.get("http://localhost:3000/getcaptchadata");
+    if (response.status === 429) {
+      throw new Error(
+        response.data.message || "Too many requests. Please try again later."
+      );
+    }
+    return response.data;
 
     // Returning hardcoded mock data
-    return {
-      sessionId: "mock-session-id-" + Math.random().toString(36).substr(2, 9),
-      backgroundImage: mockLarge,
-      puzzleImages: [mockImage1, mockImage2, mockImage3, mockImage4],
-      startPositions: [
-        { x: 150, y: 150 },
-        { x: 50, y: 70 },
-        { x: 67, y: 144 },
-        { x: 89, y: 100 },
-      ],
-    };
+    // return {
+    //   sessionId: "mock-session-id-" + Math.random().toString(36).substr(2, 9),
+    //   backgroundImage: mockLarge,
+    //   puzzleImages: [mockImage1, mockImage2, mockImage3, mockImage4],
+    //   startPositions: [
+    //     { x: 150, y: 150 },
+    //     { x: 50, y: 70 },
+    //     { x: 67, y: 144 },
+    //     { x: 89, y: 100 },
+    //   ],
+    // };
   } catch (error) {
     // Check for rate limit error (HTTP 429)
     if (axios.isAxiosError(error) && error.response?.status === 429) {

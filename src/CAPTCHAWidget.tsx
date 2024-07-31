@@ -210,7 +210,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
           }}
         >
-          {puzzleImages.map((img, index) => (
+          {puzzleImages.map((img: string, index: number) => (
             <DraggableImage
               key={index}
               index={index}
