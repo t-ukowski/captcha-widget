@@ -13,7 +13,7 @@ let root: Root | null = null; // Keep a reference to the root
 const attachCAPTCHA = () => {
   // This function will attempt to attach the CAPTCHA to an element with ID 'captcha'
   const rootElement = document.getElementById("captcha");
-  if (rootElement) {
+  if (rootElement && !rootElement.hasChildNodes()) {
     root = createRoot(rootElement);
     root.render(
       <QueryClientProvider client={queryClient}>
