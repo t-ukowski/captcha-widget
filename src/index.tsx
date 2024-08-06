@@ -23,10 +23,8 @@ const attachCAPTCHA = () => {
           <CAPTCHAWidget onSolve={detachCAPTCHA} />
         </QueryClientProvider>
       );
-    } else {
-      console.error("CAPTCHA is already attached or no target element found.");
     }
-  }, 100); // Adjust the timing based on your context
+  }, 60); // Adjust the timing based on your context
 };
 
 const detachCAPTCHA = () => {
