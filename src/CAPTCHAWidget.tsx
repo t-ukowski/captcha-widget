@@ -110,6 +110,11 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   }, [isDataLoading, startPositions]);
 
   useEffect(() => {
+    console.log("CAPTCHAWidget mounted");
+    return () => console.log("CAPTCHAWidget unmounted");
+  }, []); // TEST
+
+  useEffect(() => {
     if (validationResult) {
       if (validationResult.success) {
         setShowSuccess(true);
@@ -236,7 +241,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.6.3</div>
+        <div>ver 0.6.4</div>
       </CAPTCHAContainer>
     );
   }

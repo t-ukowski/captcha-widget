@@ -1,5 +1,5 @@
 // useCAPTCHAData.js
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import mockLarge from "../images/mock_large.jpg";
@@ -47,7 +47,6 @@ const fetchCAPTCHAData = async () => {
 
 const useCAPTCHAData = () => {
   const [rateLimitMessage, setRateLimitMessage] = useState<string | null>(null);
-  const isMounted = useRef(false);
 
   const { data, isLoading, error, refetch } = useQuery(
     "captchaData",
@@ -55,21 +54,14 @@ const useCAPTCHAData = () => {
     {
       staleTime: Infinity,
       cacheTime: Infinity,
+      refetchOnWindowFocus: false,
       onError: (error: any) => {
         if (error.message === "Too many requests. Please try again later.") {
           setRateLimitMessage(error.message);
         }
       },
-      enabled: !isMounted.current, // Disable query until the first mount
     }
   );
-
-  useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      refetch(); // Fetch data once the component has mounted
-    }
-  }, []);
 
   // Provide a function to manually clear the rate limit message
   const clearRateLimitMessage = () => setRateLimitMessage(null);
