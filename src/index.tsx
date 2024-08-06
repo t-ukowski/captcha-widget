@@ -15,6 +15,7 @@ const attachCAPTCHA = () => {
   const rootElement = document.getElementById("captcha");
   if (rootElement && !rootElement.hasChildNodes()) {
     root = createRoot(rootElement);
+    console.log("attaching captcha!");
     root.render(
       <QueryClientProvider client={queryClient}>
         <CAPTCHAWidget onSolve={detachCAPTCHA} />
