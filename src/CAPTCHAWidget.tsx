@@ -213,6 +213,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
             boxShadow: "1px 1px 5px rgba(0,0,0,0.1)",
+            border: "2px solid black",
+            borderRadius: "5px",
           }}
         >
           {puzzleImages.map((img: string, index: number) => (
@@ -227,6 +229,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               style={{
                 width: "100px",
                 height: "100px",
+                border: "2px solid black",
+                borderRadius: "5px",
               }}
             />
           ))}
@@ -241,7 +245,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.6.7</div>
+        <div>ver 0.6.8</div>
       </CAPTCHAContainer>
     );
   }
