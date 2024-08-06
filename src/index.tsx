@@ -9,21 +9,24 @@ const queryClient = new QueryClient();
 
 let root: Root | null = null; // Keep a reference to the root
 
-// Function to attach the CAPTCHA widget automatically to a specified element ID
+let debounceTimer: string | number | NodeJS.Timeout | undefined;
 const attachCAPTCHA = () => {
-  // This function will attempt to attach the CAPTCHA to an element with ID 'captcha'
-  const rootElement = document.getElementById("captcha");
-  if (rootElement && !rootElement.hasChildNodes()) {
-    root = createRoot(rootElement);
-    console.log("attaching captcha!");
-    root.render(
-      <QueryClientProvider client={queryClient}>
-        <CAPTCHAWidget onSolve={detachCAPTCHA} />
-      </QueryClientProvider>
-    );
-  } else {
-    console.error("No element with ID 'captcha' found.");
-  }
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    const rootElement = document.getElementById("captcha");
+    if (rootElement && !rootElement.dataset.initialized) {
+      console.log("attaching captcha!");
+      rootElement.dataset.initialized = "true"; // Mark as initialized
+      root = createRoot(rootElement);
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <CAPTCHAWidget onSolve={detachCAPTCHA} />
+        </QueryClientProvider>
+      );
+    } else {
+      console.error("CAPTCHA is already attached or no target element found.");
+    }
+  }, 100); // Adjust the timing based on your context
 };
 
 const detachCAPTCHA = () => {
