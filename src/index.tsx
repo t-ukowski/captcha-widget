@@ -15,7 +15,6 @@ const attachCAPTCHA = () => {
   debounceTimer = setTimeout(() => {
     const rootElement = document.getElementById("captcha");
     if (rootElement && !rootElement.dataset.initialized) {
-      console.log("attaching captcha!");
       rootElement.dataset.initialized = "true"; // Mark as initialized
       root = createRoot(rootElement);
       root.render(
