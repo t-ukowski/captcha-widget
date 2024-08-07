@@ -53,7 +53,7 @@ const DraggableImage = ({
   useEffect(() => {
     const handleMouseMove = (moveEvent: MouseEvent) => {
       if (!isGrabbing) return;
-      console.log("being grabbed");
+
       let newX = moveEvent.clientX - offset.x;
       let newY = moveEvent.clientY - offset.y;
       if (newX < 0) newX = 0;
@@ -85,6 +85,7 @@ const DraggableImage = ({
     <img
       src={src}
       onMouseDown={handleMouseDown}
+      draggable={false}
       style={{
         width: "100px",
         height: "100px",
@@ -260,7 +261,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.6.11</div>
+        <div>ver 0.6.12</div>
       </CAPTCHAContainer>
     );
   }
