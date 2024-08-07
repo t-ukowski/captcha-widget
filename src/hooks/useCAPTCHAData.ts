@@ -13,7 +13,7 @@ const fetchCAPTCHAData = async () => {
   try {
     // Simulate a delay and mock data fetching
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    console.log("fetching");
     // Uncomment this block for actual API call
     const response = await axios.get("http://localhost:3003/getcaptchadata");
     if (response.status === 429) {
