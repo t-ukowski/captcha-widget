@@ -128,7 +128,9 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   const [showError, setShowError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isDataLoading) {
+    if (isDataLoading) {
+      setPositions([]);
+    } else {
       setPositions(startPositions);
     }
   }, [isDataLoading, startPositions]);
@@ -264,7 +266,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.7.0</div>
+        <div>ver 0.7.1</div>
       </CAPTCHAContainer>
     );
   }
