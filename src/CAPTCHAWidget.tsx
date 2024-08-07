@@ -13,7 +13,6 @@ type DraggableImageProps = {
   src: string;
   index: number;
   positions: Position[];
-  style: React.CSSProperties;
   updatePosition: (index: number, x: number, y: number) => void;
 };
 
@@ -27,7 +26,6 @@ const DraggableImage = ({
   index,
   positions,
   zIndexes,
-  style,
   updatePosition,
   updateZIndex,
 }: DraggableImageProps & {
@@ -35,15 +33,29 @@ const DraggableImage = ({
   updateZIndex: (index: number, newZIndex: number) => void;
 }) => {
   const [isGrabbing, setIsGrabbing] = useState(false);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
   const handleMouseDown = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) => {
     const offsetX = e.clientX - positions[index].x;
     const offsetY = e.clientY - positions[index].y;
 
+    setOffset({ x: offsetX, y: offsetY });
+    setIsGrabbing(true);
+
+    const maxZIndex = Math.max(...zIndexes);
+    updateZIndex(index, maxZIndex + 1);
+
+    e.preventDefault();
+  };
+
+  useEffect(() => {
     const handleMouseMove = (moveEvent: MouseEvent) => {
-      let newX = moveEvent.clientX - offsetX;
-      let newY = moveEvent.clientY - offsetY;
+      if (!isGrabbing) return;
+
+      let newX = moveEvent.clientX - offset.x;
+      let newY = moveEvent.clientY - offset.y;
       if (newX < 0) newX = 0;
       if (newX > 300) newX = 300;
       if (newY < 0) newY = 0;
@@ -52,26 +64,33 @@ const DraggableImage = ({
     };
 
     const handleMouseUp = () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
       setIsGrabbing(false);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-    e.preventDefault();
-    setIsGrabbing(true);
+    if (isGrabbing) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    } else {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    }
 
-    const maxZIndex = Math.max(...zIndexes);
-    updateZIndex(index, maxZIndex + 1);
-  };
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isGrabbing, offset, index, updatePosition]);
 
   return (
     <img
       src={src}
       onMouseDown={handleMouseDown}
       style={{
-        ...style,
+        width: "100px",
+        height: "100px",
+        border: "3px solid black",
+        borderRadius: "5px",
+        margin: "-3px -3px -3px -3px",
         cursor: isGrabbing ? "grabbing" : "grab",
         position: "absolute",
         left: `${positions[index].x}px`,
@@ -226,13 +245,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
               zIndexes={zIndexes}
               updatePosition={updatePosition}
               updateZIndex={updateZIndex}
-              style={{
-                width: "100px",
-                height: "100px",
-                border: "3px solid black",
-                borderRadius: "5px",
-                margin: "-3px -3px -3px -3px",
-              }}
             />
           ))}
         </div>
@@ -246,7 +258,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.6.9</div>
+        <div>ver 0.6.10</div>
       </CAPTCHAContainer>
     );
   }
