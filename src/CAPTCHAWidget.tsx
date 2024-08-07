@@ -81,27 +81,14 @@ const DraggableImage = ({
     };
   }, [isGrabbing, offset, index, updatePosition]);
 
-  // Disable default drag events
-  useEffect(() => {
-    const imgElement = document.getElementById(`draggable-img-${index}`);
-
-    if (imgElement) {
-      imgElement.addEventListener("dragstart", (e) => e.preventDefault());
-    }
-
-    return () => {
-      if (imgElement) {
-        imgElement.removeEventListener("dragstart", (e) => e.preventDefault());
-      }
-    };
-  }, [index]);
-
   return (
     <img
-      id={`draggable-img-${index}`}
       src={src}
       onMouseDown={handleMouseDown}
-      draggable={false} // Disable default drag behavior
+      draggable={false}
+      onDragStart={() => {
+        return false;
+      }}
       style={{
         width: "100px",
         height: "100px",
@@ -192,23 +179,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     solveCAPTCHA(sessionId, positions);
   };
 
-  // Disable default drag events on container
-  useEffect(() => {
-    const containerElement = document.getElementById("boundary-container");
-
-    if (containerElement) {
-      containerElement.addEventListener("dragstart", (e) => e.preventDefault());
-    }
-
-    return () => {
-      if (containerElement) {
-        containerElement.removeEventListener("dragstart", (e) =>
-          e.preventDefault()
-        );
-      }
-    };
-  }, []);
-
   if (isDataLoading || isValidating || positions.length === 0) {
     return (
       <CAPTCHAContainer>
@@ -257,7 +227,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           Przeciągnij puzzle na właściwe miejsca i zatwierdź wybór
         </div>
         <div
-          id="boundary-container"
           style={{
             width: "400px",
             height: "400px",
@@ -295,7 +264,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.6.12</div>
+        <div>ver 0.6.11</div>
       </CAPTCHAContainer>
     );
   }
