@@ -131,6 +131,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     if (isDataLoading) {
       setPositions([]);
       console.log("in loading");
+      console.log(isDataLoading);
+      console.log(positions);
     } else {
       setPositions(startPositions);
     }
