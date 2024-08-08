@@ -11,9 +11,6 @@ import mockImage4 from "../images/mock4.jpg";
 // Mock API function to simulate fetching CAPTCHA data
 const fetchCAPTCHAData = async () => {
   try {
-    // Simulate a delay and mock data fetching
-    console.log("fetching");
-    // Uncomment this block for actual API call
     const response = await axios.get("http://localhost:3003/getcaptchadata");
     if (response.status === 429) {
       throw new Error(
