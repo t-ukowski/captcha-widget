@@ -42,6 +42,9 @@ module.exports = {
       template: "src/index.html",
       inject: true,
     }),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
+    }),
   ],
   devServer: {
     static: {

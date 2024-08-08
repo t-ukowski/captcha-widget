@@ -7,6 +7,8 @@ interface ValidationResult {
   token?: string;
 }
 
+const apiUrl = process.env.API_BASE_URL;
+
 const useCAPTCHASolver = () => {
   const [validationResult, setValidationResult] =
     useState<ValidationResult | null>(null);
@@ -21,7 +23,7 @@ const useCAPTCHASolver = () => {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:3003/validate", {
+      const response = await axios.post(`${apiUrl}/validate`, {
         sessionId,
         positions,
       });
