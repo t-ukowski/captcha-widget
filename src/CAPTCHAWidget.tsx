@@ -263,10 +263,10 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             width: "100%",
           }}
         >
-          <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
+          {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.8.0</div>
+        <div>ver 0.8.1</div>
       </CAPTCHAContainer>
     );
   }

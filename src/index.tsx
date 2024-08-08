@@ -28,6 +28,8 @@ const attachCAPTCHA = () => {
 
 const detachCAPTCHA = () => {
   if (root) {
+    const rootElement = document.getElementById("captcha");
+    if (rootElement) rootElement.dataset.initialized = "false";
     root.unmount(); // Unmounts the component
     root = null; // Clear the reference
     console.log("CAPTCHA detached and cleaned up.");
