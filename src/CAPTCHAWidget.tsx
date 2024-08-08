@@ -152,6 +152,8 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
         }, 3000);
       } else {
         setShowError(true);
+        // to put us back in loading
+        setPositions([]);
         newCAPTCHA();
       }
     }
@@ -177,8 +179,6 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
 
   const handleSolveClick = () => {
     solveCAPTCHA(sessionId, positions);
-    setShowError(false);
-    setPositions([]);
   };
 
   if (isDataLoading || isValidating || positions.length === 0) {
@@ -266,7 +266,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton>
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 0.7.5</div>
+        <div>ver 0.7.6</div>
       </CAPTCHAContainer>
     );
   }
