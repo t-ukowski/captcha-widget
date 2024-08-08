@@ -1,5 +1,10 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+const webpack = require("webpack");
+const dotenv = require("dotenv");
+
+// Load .env file
+dotenv.config();
 
 module.exports = {
   entry: "./src/index.tsx",

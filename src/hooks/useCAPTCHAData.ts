@@ -8,7 +8,7 @@ import mockImage2 from "../images/mock2.jpg";
 import mockImage3 from "../images/mock3.jpg";
 import mockImage4 from "../images/mock4.jpg";
 
-const apiUrl = process.env.API_BASE_URL;
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 const fetchCAPTCHAData = async (fingerprint: string) => {
   try {

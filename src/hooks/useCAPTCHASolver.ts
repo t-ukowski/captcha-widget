@@ -7,7 +7,7 @@ interface ValidationResult {
   token?: string;
 }
 
-const apiUrl = process.env.API_BASE_URL;
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 const useCAPTCHASolver = () => {
   const [validationResult, setValidationResult] =
