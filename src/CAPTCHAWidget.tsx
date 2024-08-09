@@ -50,7 +50,7 @@ const DraggableImage = ({
     e.preventDefault();
   };
 
-  const handleTouchStart = (e: TouchEvent) => {
+  const handleTouchStart = (e: React.TouchEvent<HTMLImageElement>) => {
     const touch = e.touches[0];
     const offsetX = touch.clientX - positions[index].x;
     const offsetY = touch.clientY - positions[index].y;
@@ -98,15 +98,10 @@ const DraggableImage = ({
       setIsGrabbing(false);
     };
 
-    document.addEventListener("touchstart", handleTouchStart, {
-      passive: false,
-    });
     if (isGrabbing) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
-      document.addEventListener("touchmove", handleTouchMove, {
-        passive: false,
-      });
+      document.addEventListener("touchmove", handleTouchMove);
       document.addEventListener("touchend", handleTouchEnd);
     } else {
       document.removeEventListener("mousemove", handleMouseMove);
@@ -116,7 +111,6 @@ const DraggableImage = ({
     }
 
     return () => {
-      document.removeEventListener("touchstart", handleTouchStart);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("touchmove", handleTouchMove);
@@ -128,6 +122,7 @@ const DraggableImage = ({
     <img
       src={src}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       draggable={false}
       onDragStart={() => {
         return false;
@@ -180,6 +175,28 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     console.log("CAPTCHAWidget mounted");
     return () => console.log("CAPTCHAWidget unmounted");
   }, []); // TEST
+
+  useEffect(() => {
+    // Function to disable scrolling on mobile devices
+    const disableScrollingOnMobile = () => {
+      if (window.innerWidth <= 768) {
+        // You can adjust this breakpoint as needed
+        document.body.style.overflow = "hidden";
+      }
+    };
+
+    // Function to re-enable scrolling
+    const enableScrolling = () => {
+      document.body.style.overflow = "";
+    };
+
+    disableScrollingOnMobile();
+
+    // Re-enable scrolling on unmount
+    return () => {
+      enableScrolling();
+    };
+  }, []);
 
   useEffect(() => {
     if (validationResult) {
@@ -309,7 +326,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.1.7</div>
+        <div>ver 1.1.9</div>
       </CAPTCHAContainer>
     );
   }
