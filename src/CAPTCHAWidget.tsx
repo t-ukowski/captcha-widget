@@ -98,10 +98,10 @@ const DraggableImage = ({
       setIsGrabbing(false);
     };
 
+    document.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
     if (isGrabbing) {
-      document.addEventListener("touchstart", handleTouchStart, {
-        passive: false,
-      });
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
       document.addEventListener("touchmove", handleTouchMove, {
@@ -309,7 +309,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.1.6</div>
+        <div>ver 1.1.7</div>
       </CAPTCHAContainer>
     );
   }
