@@ -50,7 +50,7 @@ const DraggableImage = ({
     e.preventDefault();
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLImageElement>) => {
+  const handleTouchStart = (e: TouchEvent) => {
     const touch = e.touches[0];
     const offsetX = touch.clientX - positions[index].x;
     const offsetY = touch.clientY - positions[index].y;
@@ -99,6 +99,9 @@ const DraggableImage = ({
     };
 
     if (isGrabbing) {
+      document.addEventListener("touchmove", handleTouchStart, {
+        passive: false,
+      });
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
       document.addEventListener("touchmove", handleTouchMove, {
@@ -113,6 +116,7 @@ const DraggableImage = ({
     }
 
     return () => {
+      document.removeEventListener("touchstart", handleTouchStart);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("touchmove", handleTouchMove);
@@ -124,7 +128,6 @@ const DraggableImage = ({
     <img
       src={src}
       onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
       draggable={false}
       onDragStart={() => {
         return false;
@@ -306,7 +309,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.1.4</div>
+        <div>ver 1.1.5</div>
       </CAPTCHAContainer>
     );
   }
