@@ -175,22 +175,26 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
   }, []); // TEST
 
   useEffect(() => {
-    // Function to disable scrolling on mobile devices
+    const preventDefault = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
     const disableScrollingOnMobile = () => {
       if (window.innerWidth <= 768) {
-        // You can adjust this breakpoint as needed
         document.body.style.overflow = "hidden";
+        document.addEventListener("touchmove", preventDefault, {
+          passive: false,
+        });
       }
     };
 
-    // Function to re-enable scrolling
     const enableScrolling = () => {
       document.body.style.overflow = "";
+      document.removeEventListener("touchmove", preventDefault);
     };
 
     disableScrollingOnMobile();
 
-    // Re-enable scrolling on unmount
     return () => {
       enableScrolling();
     };
@@ -324,7 +328,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.1.10</div>
+        <div>ver 1.1.11</div>
       </CAPTCHAContainer>
     );
   }
