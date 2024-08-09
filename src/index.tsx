@@ -1,4 +1,3 @@
-// src/index.tsx
 import React from "react";
 import { Root, createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -14,7 +13,7 @@ const attachCAPTCHA = () => {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => {
     const rootElement = document.getElementById("captcha");
-    if (rootElement && !rootElement.dataset.initialized) {
+    if (rootElement && (!rootElement.dataset.initialized || root === null)) {
       rootElement.dataset.initialized = "true"; // Mark as initialized
       root = createRoot(rootElement);
       root.render(
@@ -37,12 +36,21 @@ const detachCAPTCHA = () => {
 };
 
 // Attach the widget once the DOM is fully loaded
+const initCAPTCHA = () => {
+  const rootElement = document.getElementById("captcha");
+  if (rootElement) {
+    // Ensure that the CAPTCHA widget is reset before attempting to attach again
+    if (root) {
+      detachCAPTCHA();
+    }
+    attachCAPTCHA();
+  }
+};
+
 if (document.readyState === "complete") {
   // If document is already loaded, attach immediately
-  attachCAPTCHA();
+  initCAPTCHA();
 } else {
   // Otherwise, listen for when the DOM is fully loaded
-  document.addEventListener("DOMContentLoaded", () => {
-    attachCAPTCHA();
-  });
+  document.addEventListener("DOMContentLoaded", initCAPTCHA);
 }
