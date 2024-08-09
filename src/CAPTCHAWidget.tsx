@@ -122,6 +122,7 @@ const DraggableImage = ({
     <img
       src={src}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       draggable={false}
       onDragStart={() => {
         return false;
@@ -303,7 +304,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.1.2</div>
+        <div>ver 1.1.3</div>
       </CAPTCHAContainer>
     );
   }
