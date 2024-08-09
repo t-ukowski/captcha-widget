@@ -16,6 +16,8 @@ const attachCAPTCHA = () => {
   debounceTimer = setTimeout(() => {
     const rootElement = document.getElementById("captcha");
     console.log("2");
+    if (rootElement) console.log("rootEl present");
+    if (rootElement && !rootElement.dataset.initialized) console.log("if true");
     if (rootElement && !rootElement.dataset.initialized) {
       console.log("3");
       rootElement.dataset.initialized = "true"; // Mark as initialized
