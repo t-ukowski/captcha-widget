@@ -12,9 +12,12 @@ let root: Root | null = null; // Keep a reference to the root
 let debounceTimer: string | number | NodeJS.Timeout | undefined;
 const attachCAPTCHA = () => {
   clearTimeout(debounceTimer);
+  console.log("1");
   debounceTimer = setTimeout(() => {
     const rootElement = document.getElementById("captcha");
+    console.log("2");
     if (rootElement && !rootElement.dataset.initialized) {
+      console.log("3");
       rootElement.dataset.initialized = "true"; // Mark as initialized
       root = createRoot(rootElement);
       root.render(
