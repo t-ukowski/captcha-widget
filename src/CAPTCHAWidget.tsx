@@ -60,8 +60,6 @@ const DraggableImage = ({
 
     const maxZIndex = Math.max(...zIndexes);
     updateZIndex(index, maxZIndex + 1);
-
-    e.preventDefault();
   };
 
   useEffect(() => {
@@ -326,7 +324,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.1.9</div>
+        <div>ver 1.1.10</div>
       </CAPTCHAContainer>
     );
   }
