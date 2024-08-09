@@ -19,7 +19,7 @@ const CAPTCHAContainer: React.FC<CAPTCHAContainerProps> = ({ children }) => {
   const containerStyle: React.CSSProperties = {
     display: "flex",
     justifyContent: "center",
-    padding: isSmallScreen ? "2px" : "5px", // Adjust padding for small screens
+    padding: isSmallScreen ? "1px" : "5px", // Adjust padding for small screens
   };
 
   const styledDivStyle: React.CSSProperties = {
@@ -27,8 +27,8 @@ const CAPTCHAContainer: React.FC<CAPTCHAContainerProps> = ({ children }) => {
     flexDirection: "column",
     alignItems: "center",
     border: "1px solid lightgray",
-    padding: isSmallScreen ? "10px" : "15px", // Adjust padding for small screens
-    margin: isSmallScreen ? "2px" : "5px", // Adjust margin for small screens
+    padding: isSmallScreen ? "8px" : "15px", // Adjust padding for small screens
+    margin: isSmallScreen ? "0px" : "5px", // Adjust margin for small screens
     boxSizing: "border-box",
     maxWidth: "100%",
     width: isSmallScreen ? "100%" : "auto", // Full width on small screens
