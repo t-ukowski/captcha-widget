@@ -50,6 +50,20 @@ const DraggableImage = ({
     e.preventDefault();
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLImageElement>) => {
+    const touch = e.touches[0];
+    const offsetX = touch.clientX - positions[index].x;
+    const offsetY = touch.clientY - positions[index].y;
+
+    setOffset({ x: offsetX, y: offsetY });
+    setIsGrabbing(true);
+
+    const maxZIndex = Math.max(...zIndexes);
+    updateZIndex(index, maxZIndex + 1);
+
+    e.preventDefault();
+  };
+
   useEffect(() => {
     const handleMouseMove = (moveEvent: MouseEvent) => {
       if (!isGrabbing) return;
@@ -63,21 +77,44 @@ const DraggableImage = ({
       updatePosition(index, newX, newY);
     };
 
+    const handleTouchMove = (moveEvent: TouchEvent) => {
+      if (!isGrabbing) return;
+
+      const touch = moveEvent.touches[0];
+      let newX = touch.clientX - offset.x;
+      let newY = touch.clientY - offset.y;
+      if (newX < 0) newX = 0;
+      if (newX > 300) newX = 300;
+      if (newY < 0) newY = 0;
+      if (newY > 300) newY = 300;
+      updatePosition(index, newX, newY);
+    };
+
     const handleMouseUp = () => {
+      setIsGrabbing(false);
+    };
+
+    const handleTouchEnd = () => {
       setIsGrabbing(false);
     };
 
     if (isGrabbing) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
     } else {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
     }
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
   }, [isGrabbing, offset, index, updatePosition]);
 
@@ -266,7 +303,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.1.1</div>
+        <div>ver 1.1.2</div>
       </CAPTCHAContainer>
     );
   }
