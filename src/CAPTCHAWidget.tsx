@@ -285,7 +285,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
             justifyContent: "center",
           }}
         >
-          <div>Captcha Solved Successfully!</div>
+          <div>CAPTCHA rozwiązana pomyślnie!</div>
         </div>
       </CAPTCHAContainer>
     );
@@ -336,7 +336,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.3.0</div>
+        <div>ver 1.3.1</div>
       </CAPTCHAContainer>
     );
   }
