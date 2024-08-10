@@ -140,6 +140,7 @@ const DraggableImage = ({
         margin: "-3px -3px -3px -3px",
         boxSizing: "content-box",
         cursor: isGrabbing ? "grabbing" : "grab",
+        touchAction: "none",
         position: "absolute",
         left: `${positions[index].x}px`,
         top: `${positions[index].y}px`,
@@ -336,7 +337,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.3.4</div>
+        <div>ver 1.3.5</div>
       </CAPTCHAContainer>
     );
   }
