@@ -62,6 +62,12 @@ const DraggableImage = ({
     updateZIndex(index, maxZIndex + 1);
   };
 
+  const handleContextMenu = (
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+  };
+
   useEffect(() => {
     const handleMouseMove = (moveEvent: MouseEvent) => {
       if (!isGrabbing) return;
@@ -121,6 +127,7 @@ const DraggableImage = ({
       src={src}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
+      onContextMenu={handleContextMenu}
       draggable={false}
       onDragStart={() => {
         return false;
@@ -174,31 +181,32 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
     return () => console.log("CAPTCHAWidget unmounted");
   }, []); // TEST
 
-  useEffect(() => {
-    const preventDefault = (e: TouchEvent) => {
-      e.preventDefault();
-    };
+  // Disabled for now
+  // useEffect(() => {
+  //   const preventDefault = (e: TouchEvent) => {
+  //     e.preventDefault();
+  //   };
 
-    const disableScrollingOnMobile = () => {
-      if (window.innerWidth <= 768) {
-        document.body.style.overflow = "hidden";
-        document.addEventListener("touchmove", preventDefault, {
-          passive: false,
-        });
-      }
-    };
+  //   const disableScrollingOnMobile = () => {
+  //     if (window.innerWidth <= 768) {
+  //       document.body.style.overflow = "hidden";
+  //       document.addEventListener("touchmove", preventDefault, {
+  //         passive: false,
+  //       });
+  //     }
+  //   };
 
-    const enableScrolling = () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("touchmove", preventDefault);
-    };
+  //   const enableScrolling = () => {
+  //     document.body.style.overflow = "";
+  //     document.removeEventListener("touchmove", preventDefault);
+  //   };
 
-    disableScrollingOnMobile();
+  //   disableScrollingOnMobile();
 
-    return () => {
-      enableScrolling();
-    };
-  }, []);
+  //   return () => {
+  //     enableScrolling();
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (validationResult) {
@@ -328,7 +336,7 @@ const CAPTCHAWidget: React.FC<CAPTCHAWidgetProps> = ({ onSolve }) => {
           {/* <CAPTCHAButton onClick={getPositions}>Pozycje puzzli</CAPTCHAButton> */}
           <CAPTCHAButton onClick={handleSolveClick}>Zatwierdź</CAPTCHAButton>
         </div>
-        <div>ver 1.2.2</div>
+        <div>ver 1.3.0</div>
       </CAPTCHAContainer>
     );
   }

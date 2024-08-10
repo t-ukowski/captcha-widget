@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface CAPTCHAContainerProps {
   children: React.ReactNode;
@@ -6,6 +6,7 @@ interface CAPTCHAContainerProps {
 
 const CAPTCHAContainer: React.FC<CAPTCHAContainerProps> = ({ children }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -15,6 +16,30 @@ const CAPTCHAContainer: React.FC<CAPTCHAContainerProps> = ({ children }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const preventTouchScroll = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
+    const containerElement = containerRef.current;
+
+    if (containerElement && window.innerWidth <= 480) {
+      containerElement.addEventListener("touchstart", preventTouchScroll, {
+        passive: false,
+      });
+      containerElement.addEventListener("touchmove", preventTouchScroll, {
+        passive: false,
+      });
+    }
+
+    return () => {
+      if (containerElement) {
+        containerElement.removeEventListener("touchstart", preventTouchScroll);
+        containerElement.removeEventListener("touchmove", preventTouchScroll);
+      }
+    };
+  }, [isSmallScreen]);
 
   const containerStyle: React.CSSProperties = {
     display: "flex",
@@ -35,7 +60,11 @@ const CAPTCHAContainer: React.FC<CAPTCHAContainerProps> = ({ children }) => {
   };
 
   return (
-    <div className="captcha-container" style={containerStyle}>
+    <div
+      className="captcha-container"
+      style={containerStyle}
+      ref={containerRef}
+    >
       <div className="styled-div" style={styledDivStyle}>
         {children}
       </div>
